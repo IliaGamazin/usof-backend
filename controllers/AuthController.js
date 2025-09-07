@@ -1,7 +1,18 @@
+const User = require("../models/User");
+
 class AuthController {
     async register(req, res) {
         console.log(req.body);
-        res.json(req.body);
+        const users = User.get_all({
+            login: req.body.login,
+            email: req.body.email
+        });
+
+        console.log(users);
+
+        if (users.length === 0) {
+            
+        }
     }
 
     async login(req, res) {

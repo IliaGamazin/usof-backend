@@ -22,6 +22,10 @@ class Model {
         return rows.map(row => new this(row));
     }
 
+    static async exists(where) {
+        return await this.find(where) != null;
+    }
+
     async save() {
         const fields = Object.keys(this).filter(key => key !== "id");
         const values = fields.map(key => this[key]);
