@@ -1,17 +1,16 @@
 const User = require("../models/User");
+const AuthService = require("../services/AuthService");
 
 class AuthController {
-    async register(req, res) {
+    async register(req, res, next) {
         console.log(req.body);
-        const users = User.get_all({
-            login: req.body.login,
-            email: req.body.email
-        });
-
-        console.log(users);
-
-        if (users.length === 0) {
-            
+        const { login, email, password, password_confirmation } = req.body;
+        try {
+            await AuthService.register(login, email, password, password_confirmation);
+            res.status(201).json({})
+        }
+        catch (error) {
+            next(error);
         }
     }
 

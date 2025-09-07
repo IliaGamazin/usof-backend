@@ -3,7 +3,7 @@ CREATE DATABASE IF NOT EXISTS usof;
 USE usof;
 
 CREATE USER IF NOT EXISTS 'slave'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
-GRANT ALL PRIVILEGES ON heartclone.* TO 'slave'@'localhost';
+GRANT ALL PRIVILEGES ON usof.* TO 'slave'@'localhost';
 
 CREATE TABLE IF NOT EXISTS users (
     id INT UNSIGNED AUTO_INCREMENT,

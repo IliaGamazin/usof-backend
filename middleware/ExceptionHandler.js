@@ -1,7 +1,9 @@
 const { ZodError } = require('zod');
-
+const AppException = require("../exceptions/AppException");
 const exception_handler = (error, req, res, next) => {
-    //console.error(`${req.method} ${req.path} - Error:`, error);
+    console.error(`${req.method} ${req.path} - Error:`, error);
+    console.log(error?.statusCode);
+
     if (error instanceof ZodError) {
         return res.status(400).json({
             success: false,
@@ -14,16 +16,14 @@ const exception_handler = (error, req, res, next) => {
         });
     }
 
-    res.status(500).json({
-        success: false,
-        message: process.env.NODE_ENV === 'production'
-            ? 'Internal server error'
-            : error.message,
-        ...(process.env.NODE_ENV !== 'production' && {
-            stack: error.stack,
-            name: error.name
-        })
-    });
+    if (!(error instanceof AppException)) {
+        error = new AppException(
+            error.message || 'Internal server error',
+            error.statusCode || 500
+        );
+    }
+
+    res.status(error.statusCode).json(error.toJSON());
 }
 
 module.exports = exception_handler;
