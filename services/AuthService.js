@@ -2,6 +2,8 @@ const bcrypt = require("bcrypt");
 
 const User = require("../models/User");
 const ConflictException = require("../exceptions/ConflictException");
+const CredentialsException = require("../exceptions/CredentialsException");
+const JwtService = require("./JwtService");
 
 class AuthService {
     async register(login, email, password, password_confirmation) {
@@ -28,6 +30,45 @@ class AuthService {
 
         await user.save();
         return user;
+    }
+
+    async login(login, email, password) {
+        const user = await User.find({login});
+
+        if (!user) {
+            throw new CredentialsException("No user with login");
+        }
+
+        const valid = await bcrypt.compare(password, user.password);
+        if (!valid) {
+            throw new CredentialsException("Incorrect password");
+        }
+
+        return user;
+    }
+
+    send_auth_response(res, user, message, statusCode = 200) {
+        const payload = {
+            id: user.id,
+            login: user.login,
+            email: user.email,
+            role: user.role || 'USER'
+        };
+
+        const tokens = JwtService.generate_token_pair(payload);
+
+        res.cookie('refresh_token', tokens.refresh_token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 24 * 60 * 60 * 1000
+        });
+
+        return res.status(statusCode).json({
+            message,
+            user: payload,
+            access_token: tokens.access_token
+        });
     }
 }
 
