@@ -26,6 +26,11 @@ class Model {
         return await this.find(where) != null;
     }
 
+    async delete() {
+        const sql = `DELETE FROM ${this.constructor.table_name} WHERE id = ?`;
+        await pool.execute(sql, [this.id]);
+    }
+
     async save() {
         const fields = Object.keys(this).filter(key => key !== "id");
         const values = fields.map(key => this[key]);

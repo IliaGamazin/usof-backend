@@ -5,7 +5,6 @@ const AppException = require("../exceptions/AppException");
 
 const exception_handler = (error, req, res, next) => {
     console.error(`${req.method} ${req.path} - Error:`, error);
-    console.log(error);
 
     if (error instanceof ZodError) {
         return res.status(400).json({

@@ -33,10 +33,10 @@ class AuthService {
     }
 
     async login(login, email, password) {
-        const user = await User.find({login});
+        const user = await User.find({login, email});
 
         if (!user) {
-            throw new CredentialsException("No user with login");
+            throw new CredentialsException("No user with login/email");
         }
 
         const valid = await bcrypt.compare(password, user.password);
