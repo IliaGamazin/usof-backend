@@ -21,27 +21,6 @@ class UsersController {
         }
     }
 
-    async update_user(req, res, next) {
-        try {
-            res.status(200).json({});
-        }
-        catch (error) {
-            next(error);
-        }
-    }
-
-    async delete_user(req, res, next) {
-        try {
-            const id = req.params.user_id;
-            const requestor = req.user;
-            await UserService.delete_user(id, requestor);
-            res.status(204).send();
-        }
-        catch (error) {
-            next(error);
-        }
-    }
-
     async new_user(req, res, next) {
         try {
             const { login, email, password,
@@ -55,8 +34,29 @@ class UsersController {
         }
     }
 
+    async update_user(req, res, next) {
+        try {
+            res.status(200).json({});
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+
     async set_avatar(req, res, next) {
         try {
+            res.status(204).send();
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+
+    async delete_user(req, res, next) {
+        try {
+            const id = req.params.user_id;
+            const requestor = req.user;
+            await UserService.delete_user(id, requestor);
             res.status(204).send();
         }
         catch (error) {

@@ -8,4 +8,4 @@ class Category extends Model {
     }
 }
 
-module.exports = Comment;
+module.exports = Category;

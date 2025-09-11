@@ -6,17 +6,19 @@ const PermissionException = require("../exceptions/PermissionException");
 const ConflictException = require("../exceptions/ConflictException");
 
 class UserService {
-    async delete_user(id, requestor) {
+    async get_user(id) {
         const user = await User.find({ id });
         if (!user) {
             throw new CredentialsException("No user with id");
         }
 
-        if (requestor.id !== user.id && requestor.role !== "ADMIN") {
-            throw new PermissionException("Permission denied");
-        }
-
-        await user.delete();
+        return {
+            id: user.id,
+            login: user.login,
+            pfp: user.profile_picture,
+            rating: user.rating,
+            role: user.role
+        };
     }
 
     async new_user(login, email, password, password_confirmation, role) {
@@ -45,19 +47,17 @@ class UserService {
         return user;
     }
 
-    async get_user(id) {
+    async delete_user(id, requestor) {
         const user = await User.find({ id });
         if (!user) {
             throw new CredentialsException("No user with id");
         }
 
-        return {
-            id: user.id,
-            login: user.login,
-            pfp: user.profile_picture,
-            rating: user.rating,
-            role: user.role
-        };
+        if (requestor.id !== user.id && requestor.role !== "ADMIN") {
+            throw new PermissionException("Permission denied");
+        }
+
+        await user.delete();
     }
 }
 

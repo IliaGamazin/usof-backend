@@ -4,9 +4,9 @@ const {login, password, email} = require('./GeneralSchemas');
 
 const schema = {
     register: z.object({
-        login: login,
-        email: email,
-        password: password,
+        login,
+        email,
+        password,
         password_confirmation: z.string().min(1, "Please confirm the password"),
     }).refine((data) => data.password === data.password_confirmation, {
         message: "Passwords must match",
@@ -14,9 +14,9 @@ const schema = {
     }),
 
     login: z.object({
-        login: login,
-        email: email,
-        password: password,
+        login,
+        email,
+        password,
     }),
 }
 
