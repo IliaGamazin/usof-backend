@@ -4,5 +4,9 @@
 # Dependencies
 node_modules/
 
+# Vault
+
+vault/
+
 # Lock files
 package-lock.json

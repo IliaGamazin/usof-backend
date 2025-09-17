@@ -5,9 +5,23 @@ const User = require("../models/User");
 class AuthController {
     async register(req, res, next) {
         console.log(req.body);
-        const { login, email, password, password_confirmation } = req.body;
+        const {
+            login,
+            firstname,
+            lastname,
+            email,
+            password,
+            password_confirmation,
+        } = req.body;
         try {
-            const user = await AuthService.register(login, email, password, password_confirmation);
+            const user = await AuthService.register(
+                login,
+                firstname,
+                lastname,
+                email,
+                password,
+                password_confirmation,
+            );
             return AuthService.send_auth_response(res, user, "Registration successful", 201)
         }
         catch (error) {
@@ -17,7 +31,11 @@ class AuthController {
 
     async login(req, res, next) {
         console.log(req.body);
-        const { login, email, password } = req.body;
+        const {
+            login,
+            email,
+            password
+        } = req.body;
         try {
             const user = await AuthService.login(login, email, password);
             return AuthService.send_auth_response(res, user, "Login successful", 200)

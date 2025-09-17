@@ -1,10 +1,12 @@
 const { z } = require('zod');
 
-const { login, email, password } = require("./GeneralSchemas");
+const { login, email, password, name } = require("./GeneralSchemas");
 
 const schema = {
     new_user: z.object({
         login,
+        firstname: name,
+        lastname: name,
         email,
         password,
         password_confirmation: z.string().min(1, "Please confirm the password"),
@@ -15,6 +17,8 @@ const schema = {
     }),
     update_user: z.object({
         login,
+        firstname: name,
+        lastname: name,
         email,
         password,
     }),

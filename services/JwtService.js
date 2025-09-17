@@ -40,8 +40,6 @@ class JwtService {
             refresh_token: this.generate_refresh_token(refresh_payload),
         }
     }
-
-    static
 }
 
 module.exports = JwtService;

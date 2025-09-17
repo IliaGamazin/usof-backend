@@ -6,12 +6,13 @@ const CredentialsException = require("../exceptions/CredentialsException");
 const JwtService = require("./JwtService");
 
 class AuthService {
-    async register(login, email, password, password_confirmation) {
+    async register(login, firstname, lastname, email, password, password_confirmation) {
         const users = await User.get_all({
             login: login,
             email: email,
         });
 
+        console.log(login, email);
         console.log(users);
 
         if (users.length > 0) {
@@ -21,8 +22,10 @@ class AuthService {
         const hash = await bcrypt.hash(password, 12);
         const user = new User({
             login,
-            password: hash,
+            firstname,
+            lastname,
             email,
+            password: hash,
             profile_picture: null,
             rating: 0,
             role: "USER"

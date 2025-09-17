@@ -8,6 +8,8 @@ GRANT ALL PRIVILEGES ON usof.* TO 'slave'@'localhost';
 CREATE TABLE IF NOT EXISTS users (
     id INT UNSIGNED AUTO_INCREMENT,
     login VARCHAR(32) NOT NULL UNIQUE,
+    firstname VARCHAR(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    lastname VARCHAR(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
     password VARCHAR(320) NOT NULL,
     email VARCHAR(320) NOT NULL UNIQUE,
     profile_picture VARCHAR(255) NULL,
@@ -27,7 +29,7 @@ CREATE TABLE IF NOT EXISTS categories (
 
 CREATE TABLE IF NOT EXISTS posts (
     id INT UNSIGNED AUTO_INCREMENT,
-    author_id INT UNSIGNED NOT NULL UNIQUE,
+    author_id INT UNSIGNED NOT NULL,
     title VARCHAR(255) NOT NULL,
     status ENUM('ACTIVE', 'INACTIVE') NOT NULL DEFAULT 'ACTIVE',
     content TEXT NOT NULL,
@@ -37,7 +39,9 @@ CREATE TABLE IF NOT EXISTS posts (
 
     PRIMARY KEY(id),
     FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE
-);
+)
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS posts_categories (
     post_id INT UNSIGNED NOT NULL,
@@ -47,6 +51,14 @@ CREATE TABLE IF NOT EXISTS posts_categories (
     FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
 );
+
+-- CREATE TABLE IF NOT EXISTS users_favourites (
+--
+-- );
+--
+-- CREATE TABLE IF NOT EXISTS users_subscriptions (
+--
+-- );
 
 CREATE TABLE IF NOT EXISTS comments (
     id INT UNSIGNED AUTO_INCREMENT,

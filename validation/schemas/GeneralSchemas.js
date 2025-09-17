@@ -12,4 +12,8 @@ const password = z.string()
 const email = z.email("Please enter a valid email address")
     .max(320, "Email is too long");
 
-module.exports = { login, password, email };
+const name = z.string() .min(2, "Name must be at least 2 characters long")
+    .max(32, "Name must be at most 50 characters long")
+    .regex(/^[\p{L}\p{M} -]+$/u, "Name can only contain letters, spaces, and hyphens");
+
+module.exports = { login, password, email, name };
