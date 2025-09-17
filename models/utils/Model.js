@@ -22,6 +22,37 @@ class Model {
         return rows.map(row => new this(row));
     }
 
+    static async get_all_paged({
+                                   where = {},
+                                   page = 1,
+                                   limit = 10,
+                                   strict = false,
+                                   order_by = "id",
+                                   order_dir = "ASC",
+                               } = {}) {
+        const offset = (page - 1) * limit;
+
+        const [countRows] = await pool.execute(
+            `SELECT COUNT(*) AS count FROM ${this.table_name}`
+        );
+        const total = countRows[0].count;
+        const total_pages = Math.ceil(total / limit);
+
+        const rows = await QueryBuilder.query_where(this.table_name, {
+            where,
+            strict,
+            limit,
+            offset,
+            order_by,
+            order_dir,
+        });
+
+        return {
+            data: rows.map(row => new this(row)),
+            pagination: { page, limit, total, total_pages, order_by, order_dir },
+        };
+    }
+
     static async exists(where) {
         return await this.find(where) != null;
     }

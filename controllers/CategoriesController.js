@@ -1,9 +1,36 @@
 const CategoryService = require("../services/CategoryService");
+const Category = require("../models/Category");
+const User = require("../models/User");
 
 class CategoriesController {
     async get_categories(req, res, next) {
         try {
-            res.status(200).json({});
+            let page = parseInt(req.query.page, 10) || 1;
+            let limit = parseInt(req.query.limit, 10) || 10;
+            let order_by = req.query.orderBy || "id";
+            let order_dir = req.query.orderDir || "ASC";
+            const allowed = ["id", "title"];
+
+            if (!allowed.includes(order_by)) {
+                order_by = "id";
+            }
+
+            const result = await Category.get_all_paged({
+                page,
+                limit,
+                order_by,
+                order_dir,
+            });
+
+            const res_data = result.data.map(user => {
+                const { password, ...safe } = user; // strip password
+                return safe;
+            });
+
+            res.json({
+                data: res_data,
+                pagination: result.pagination,
+            });
         }
         catch (error) {
             next(error);

@@ -1,9 +1,34 @@
 const UserService = require("../services/UserService");
+const User = require("../models/User");
 
 class UsersController {
     async get_users(req, res, next) {
         try {
-            res.status(200).json({});
+            let page = parseInt(req.query.page, 10) || 1;
+            let limit = parseInt(req.query.limit, 10) || 10;
+            let order_by = req.query.orderBy || "id";
+            let order_dir = req.query.orderDir || "ASC";
+            const allowed = ["id", "login", "rating"];
+            if (!allowed.includes(order_by)) {
+                order_by = "id";
+            }
+
+            const result = await User.get_all_paged({
+                page,
+                limit,
+                order_by,
+                order_dir,
+            });
+
+            const res_data = result.data.map(user => {
+                const { password, ...safe } = user; // strip password
+                return safe;
+            });
+
+            res.json({
+                data: res_data,
+                pagination: result.pagination,
+            });
         }
         catch (error) {
             next(error);
