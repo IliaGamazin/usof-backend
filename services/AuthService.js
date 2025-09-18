@@ -12,9 +12,6 @@ class AuthService {
             email: email,
         });
 
-        console.log(login, email);
-        console.log(users);
-
         if (users.length > 0) {
             throw new ConflictException("User already exists");
         }
@@ -29,7 +26,7 @@ class AuthService {
             profile_picture: null,
             rating: 0,
             role: "USER"
-        })
+        });
 
         await user.save();
         return user;

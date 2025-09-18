@@ -27,7 +27,7 @@ class PostService {
         }
 
         let res = []
-        const posts_categories =  await PostsCategories.get_all({post_id: id});
+        const posts_categories =  await PostsCategories.get_all({ post_id: id });
         for (const pc of posts_categories) {
             const category = await Category.find({ id: pc.category_id });
             res.push(category);
@@ -56,6 +56,11 @@ class PostService {
         const categories_ids = await CategoryService.parse_categories(categories)
 
         const id = await post.save();
+
+        console.log(id);
+        console.log(categories);
+        console.log(categories_ids);
+
         await CategoryService.save_categories(id, categories_ids);
 
         let info_arr = [];
@@ -102,7 +107,7 @@ class PostService {
             throw new PermissionException("Permission denied");
         }
 
-        const pc = await PostsCategories.get_all({post_id: id});
+        const pc = await PostsCategories.get_all({ post_id: id });
         for (const pc1 of pc) {
             await pc1.delete();
         }

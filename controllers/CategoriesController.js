@@ -8,8 +8,8 @@ class CategoriesController {
             let limit = parseInt(req.query.limit, 10) || 10;
             let order_by = req.query.order_by || "id";
             let order_dir = req.query.order_dir || "ASC";
-            const allowed = ["id", "title"];
 
+            const allowed = ["id", "title"];
             if (!allowed.includes(order_by)) {
                 order_by = "id";
             }

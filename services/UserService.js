@@ -31,8 +31,6 @@ class UserService {
             email: email,
         });
 
-        console.log(users);
-
         if (users.length > 0) {
             throw new ConflictException("User already exists");
         }
@@ -85,8 +83,6 @@ class UserService {
             user.lastname = lastname;
         }
 
-        console.log(user);
-
         await user.save();
         return user;
     }
@@ -99,6 +95,7 @@ class UserService {
 
         const info = await FileService.save_image(avatar, 'avatars', id);
         user.profile_picture = info.url;
+
         await user.save();
         return info.url;
     }
@@ -109,9 +106,11 @@ class UserService {
         if (!user) {
             throw new CredentialsException("No user with id");
         }
+
         if (requestor.id !== user.id && requestor.role !== "ADMIN") {
             throw new PermissionException("Permission denied");
         }
+
         if (user.profile_picture) {
             const filename = user.profile_picture.split('/').pop();
             await FileService.delete_file('avatars', filename);

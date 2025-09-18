@@ -43,13 +43,10 @@ class CategoryService {
         });
     }
 
-
     async new_category(title, description) {
         const categories = await Category.get_all({
             title
         });
-
-        console.log(categories);
 
         if (categories.length > 0) {
             throw new ConflictException("Category already exists");
@@ -58,7 +55,7 @@ class CategoryService {
         const category = new Category({
             title,
             description
-        })
+        });
 
         await category.save();
         return category;
@@ -85,8 +82,6 @@ class CategoryService {
             category.description = description;
         }
 
-        console.log(category);
-
         await category.save();
         return category;
     }
@@ -100,10 +95,10 @@ class CategoryService {
         await category.delete();
     }
 
-    async save_categories(id, categories_ids) {
+    async save_categories(post_id, categories_ids) {
         for (const category_id of categories_ids) {
             let pc = new PostsCategories()
-            pc.post_id = id;
+            pc.post_id = post_id;
             pc.category_id = category_id;
             await pc.save();
         }
