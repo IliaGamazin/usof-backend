@@ -10,8 +10,9 @@ class PostsController {
             let order_by = req.query.order_by || "created_at";
             let order_dir = req.query.order_dir || "DESC";
             let where = {};
+
             if (req.user.role !== "ADMIN") {
-                where = {status: "ACTIVE"};
+                where = { status: "ACTIVE" };
             }
 
             const result = await Post.get_all_paged({
@@ -35,7 +36,7 @@ class PostsController {
             const post = await PostService.get_post(id);
 
             if (post.status === "INACTIVE" && req.user.role !== "ADMIN") {
-                return res.status(403).json({})
+                return res.status(403).send();
             }
 
             res.status(200).json(post);
@@ -85,14 +86,17 @@ class PostsController {
 
     async new_post(req, res, next) {
         try {
-            const files = req.files;
-            const author = req.user.id;
-
-            const { title, content, categories } = req.body;
             const categories_arr = Array.isArray(req.body.categories)
                 ? req.body.categories
                 : (req.body.categories ? [req.body.categories] : []);
-            const result = await PostService.new_post(author, title, content, categories_arr, files);
+
+            const result = await PostService.new_post(
+                req.user.id,
+                req.body.title,
+                req.body.content,
+                categories_arr,
+                req.files
+            );
 
             res.status(200).json(result);
         }
@@ -112,17 +116,18 @@ class PostsController {
 
     async update_post(req, res, next) {
         try {
-            console.log(req.body);
-            const files = req.files;
-            const author = req.user.id;
-            const id = req.params.post_id;
-
-            const { title, content, categories } = req.body;
             const categories_arr = Array.isArray(req.body.categories)
                 ? req.body.categories
                 : (req.body.categories ? [req.body.categories] : []);
 
-            const result = await PostService.update_post(id, author, title, content, categories_arr, files);
+            const result = await PostService.update_post(
+                req.params.post_id,
+                req.user.id,
+                req.body.title,
+                req.body.content,
+                categories_arr,
+                req.files
+            );
             res.status(204).json(result);
         }
         catch (error) {
@@ -132,10 +137,10 @@ class PostsController {
 
     async delete_post(req, res, next) {
         try {
-            const id = req.params.post_id;
-            const requestor = req.user;
-
-            await PostService.delete_post(id, requestor);
+            await PostService.delete_post(
+                req.params.post_id,
+                req.user
+            );
             res.status(204).json();
         }
         catch (error) {

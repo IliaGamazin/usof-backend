@@ -21,7 +21,7 @@ class UsersController {
             });
 
             const res_data = result.data.map(user => {
-                const { password, ...safe } = user; // strip password
+                const { password, ...safe } = user;
                 return safe;
             });
 
@@ -37,8 +37,9 @@ class UsersController {
 
     async get_user(req, res, next) {
         try {
-            const id = req.params.user_id;
-            const user = await UserService.get_user(id);
+            const user = await UserService.get_user(
+                req.params.user_id
+            );
             res.status(200).json(user);
         }
         catch (error) {
@@ -48,23 +49,14 @@ class UsersController {
 
     async new_user(req, res, next) {
         try {
-            const {
-                login,
-                firstname,
-                lastname,
-                email,
-                password,
-                password_confirmation,
-                role
-            } = req.body;
             await UserService.new_user(
-                login,
-                firstname,
-                lastname,
-                email,
-                password,
-                password_confirmation,
-                role
+                req.body.login,
+                req.body.firstname,
+                req.body.lastname,
+                req.body.email,
+                req.body.password,
+                req.body.password_confirmation,
+                req.body.role
             );
             return res.status(201).send();
         }
@@ -81,18 +73,12 @@ class UsersController {
                 return res.status(403).send()
             }
 
-            const {
-                login,
-                firstname,
-                lastname,
-                password
-            } = req.body;
             await UserService.update_user(
                 id,
-                login,
-                firstname,
-                lastname,
-                password,
+                req.body.login,
+                req.body.firstname,
+                req.body.lastname,
+                req.body.password,
                 user_role
             );
             return res.status(204).send();

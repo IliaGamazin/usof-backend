@@ -1,6 +1,5 @@
 const CategoryService = require("../services/CategoryService");
 const Category = require("../models/Category");
-const PostService = require("../services/PostService");
 
 class CategoriesController {
     async get_categories(req, res, next) {
@@ -22,7 +21,7 @@ class CategoriesController {
                 order_dir,
             });
 
-            res.json({result});
+            res.json(result);
         }
         catch (error) {
             next(error);
@@ -63,7 +62,7 @@ class CategoriesController {
             if (req.user.role !== "ADMIN") {
                 posts.data = posts.data.filter(post => post.status === "ACTIVE");
             }
-            res.status(200).json({posts});
+            res.status(200).json({ posts });
         }
         catch (error) {
             next(error);
@@ -72,8 +71,10 @@ class CategoriesController {
 
     async new_category(req, res, next) {
         try {
-            const { title, description } = req.body;
-            await CategoryService.new_category(title, description);
+            await CategoryService.new_category(
+                req.body.title,
+                req.body.description
+            );
             return res.status(201).send();
         }
         catch (error) {
@@ -83,9 +84,11 @@ class CategoriesController {
 
     async update_category(req, res, next) {
         try {
-            const id = req.params.category_id;
-            const { title, description } = req.body;
-            await CategoryService.update_category(id, title, description);
+            await CategoryService.update_category(
+                req.params.category_id,
+                req.body.title,
+                req.body.description
+            );
             return res.status(204).send();
         }
         catch (error) {
@@ -95,8 +98,9 @@ class CategoriesController {
 
     async delete_category(req, res, next) {
         try {
-            const id = req.params.category_id;
-            await CategoryService.delete_category(id);
+            await CategoryService.delete_category(
+                req.params.category_id
+            );
             res.status(204).send();
         }
         catch (error) {
