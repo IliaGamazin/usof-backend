@@ -53,6 +53,45 @@ class Model {
         };
     }
 
+    static async get_joined_paged({
+                                      joins = [],
+                                      where = {},
+                                      page = 1,
+                                      limit = 10,
+                                      order_by = "id",
+                                      order_dir = "ASC",
+                                      select = null
+                                  } = {}) {
+        const offset = (page - 1) * limit;
+
+        const selectFields = select || `${this.table_name}.*`;
+
+        const countResult = await QueryBuilder.query_join({
+            table: this.table_name,
+            joins,
+            where,
+            select: 'COUNT(*) as count'
+        });
+        const total = countResult[0].count;
+        const total_pages = Math.ceil(total / limit);
+
+        const rows = await QueryBuilder.query_join({
+            table: this.table_name,
+            joins,
+            where,
+            select: selectFields,
+            limit,
+            offset,
+            order_by,
+            order_dir
+        });
+
+        return {
+            data: rows.map(row => new this(row)),
+            pagination: { page, limit, total, total_pages, order_by, order_dir }
+        };
+    }
+
     static async exists(where) {
         return await this.find(where) != null;
     }
@@ -76,6 +115,8 @@ class Model {
             const [rows] = await pool.execute(sql, values);
             this.id = rows.insertId;
         }
+
+        return this.id;
     }
 }
 

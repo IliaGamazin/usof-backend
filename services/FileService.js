@@ -40,6 +40,17 @@ class FileService {
         };
     }
 
+    async get_post_images(post_id) {
+        const post_dir = path.join(this.base, 'posts', post_id.toString());
+
+        if (!fs.existsSync(post_dir)) {
+            return [];
+        }
+
+        const files = fs.readdirSync(post_dir);
+        return files.map(filename => `/vault/posts/${post_id}/${filename}`);
+    }
+
     async save_image(file, sub_dir, filename) {
         const allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
         if (!allowed.includes(file.mimetype)) {
@@ -54,6 +65,17 @@ class FileService {
 
         if (fs.existsSync(file_path)) {
             fs.unlinkSync(file_path);
+            return true;
+        }
+
+        return false;
+    }
+
+    async delete_post_directory(post_id) {
+        const post_dir = path.join(this.base, 'posts', post_id.toString());
+
+        if (fs.existsSync(post_dir)) {
+            fs.rmSync(post_dir, { recursive: true, force: true });
             return true;
         }
 

@@ -38,4 +38,50 @@ async function query_where(
     return rows;
 }
 
-module.exports = {query_where};
+async function query_join({
+                              table,
+                              joins = [],
+                              where = {},
+                              select = '*',
+                              limit = null,
+                              offset = null,
+                              order_by = null,
+                              order_dir = 'ASC'
+                          } = {}) {
+    let sql = `SELECT ${select} FROM ${table}`;
+    const values = [];
+
+    // Add JOINs
+    for (const join of joins) {
+        sql += ` ${join.type || 'INNER'} JOIN ${join.table} ON ${join.condition}`;
+    }
+
+    // Add WHERE conditions
+    const whereConditions = [];
+    for (const [key, value] of Object.entries(where)) {
+        whereConditions.push(`${key} = ?`);
+        values.push(value);
+    }
+
+    if (whereConditions.length > 0) {
+        sql += ` WHERE ${whereConditions.join(' AND ')}`;
+    }
+
+    // Add ORDER BY only if specified (important for count queries)
+    if (order_by) {
+        sql += ` ORDER BY ${order_by} ${order_dir}`;
+    }
+
+    // Add LIMIT and OFFSET
+    if (limit) {
+        sql += ` LIMIT ${limit}`;
+        if (offset) {
+            sql += ` OFFSET ${offset}`;
+        }
+    }
+
+    const [rows] = await pool.execute(sql, values);
+    return rows;
+}
+
+module.exports = {query_where, query_join};

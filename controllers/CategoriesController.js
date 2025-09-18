@@ -1,14 +1,14 @@
 const CategoryService = require("../services/CategoryService");
 const Category = require("../models/Category");
-const User = require("../models/User");
+const PostService = require("../services/PostService");
 
 class CategoriesController {
     async get_categories(req, res, next) {
         try {
             let page = parseInt(req.query.page, 10) || 1;
             let limit = parseInt(req.query.limit, 10) || 10;
-            let order_by = req.query.orderBy || "id";
-            let order_dir = req.query.orderDir || "ASC";
+            let order_by = req.query.order_by || "id";
+            let order_dir = req.query.order_dir || "ASC";
             const allowed = ["id", "title"];
 
             if (!allowed.includes(order_by)) {
@@ -22,15 +22,7 @@ class CategoriesController {
                 order_dir,
             });
 
-            const res_data = result.data.map(user => {
-                const { password, ...safe } = user; // strip password
-                return safe;
-            });
-
-            res.json({
-                data: res_data,
-                pagination: result.pagination,
-            });
+            res.json({result});
         }
         catch (error) {
             next(error);
@@ -50,7 +42,28 @@ class CategoriesController {
 
     async get_category_posts(req, res, next) {
         try {
-            res.status(200).json({});
+            let page = parseInt(req.query.page, 10) || 1;
+            let limit = parseInt(req.query.limit, 10) || 10;
+            let order_by = req.query.order_by || "id";
+            let order_dir = req.query.order_dir || "ASC";
+            const allowed = ["id", "title", "created_at", "updated_at"];
+
+            if (!allowed.includes(order_by)) {
+                order_by = "id";
+            }
+
+            const id = req.params.category_id;
+            let posts = await CategoryService.get_category_posts(
+                id,
+                page,
+                limit,
+                order_by,
+                order_dir,
+            );
+            if (req.user.role !== "ADMIN") {
+                posts.data = posts.data.filter(post => post.status === "ACTIVE");
+            }
+            res.status(200).json({posts});
         }
         catch (error) {
             next(error);

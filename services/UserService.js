@@ -101,12 +101,14 @@ class UserService {
         if (!user) {
             throw new CredentialsException("No user with id");
         }
-
         if (requestor.id !== user.id && requestor.role !== "ADMIN") {
             throw new PermissionException("Permission denied");
         }
-        const filename = user.profile_picture.split('/').pop();
-        await FileService.delete_file('avatars', filename);
+        if (user.profile_picture) {
+            const filename = user.profile_picture.split('/').pop();
+            await FileService.delete_file('avatars', filename);
+        }
+
         await user.delete();
     }
 }

@@ -2,6 +2,8 @@ const Category = require("../models/Category");
 
 const CredentialsException = require("../exceptions/CredentialsException");
 const ConflictException = require("../exceptions/ConflictException");
+const PostsCategories = require("../models/PostsCategories");
+const Post = require("../models/Post");
 
 class CategoryService {
     async get_category(id) {
@@ -16,6 +18,31 @@ class CategoryService {
             description: category.description,
         };
     }
+
+    async get_category_posts(id, page, limit, order_by, order_dir) {
+        const category = await Category.find({ id });
+        if (!category) {
+            throw new CredentialsException("No category with id");
+        }
+
+        return await Post.get_joined_paged({
+            joins: [
+                {
+                    table: 'posts_categories',
+                    condition: `posts.id = posts_categories.post_id`
+                }
+            ],
+            where: {
+                'posts_categories.category_id': id
+            },
+            page,
+            limit,
+            order_by: `posts.${order_by}`,
+            order_dir,
+            select: 'posts.*'
+        });
+    }
+
 
     async new_category(title, description) {
         const categories = await Category.get_all({
@@ -65,6 +92,27 @@ class CategoryService {
         }
 
         await category.delete();
+    }
+
+    async save_categories(id, categories_ids) {
+        for (const category_id of categories_ids) {
+            let pc = new PostsCategories()
+            pc.post_id = id;
+            pc.category_id = category_id;
+            await pc.save();
+        }
+    }
+
+    async parse_categories(categories) {
+        let res = [];
+        for (const title of categories) {
+            let category = await Category.find({ title });
+            if (!category) {
+                throw new CredentialsException("Category does not exists");
+            }
+            res.push(category.id);
+        }
+        return res;
     }
 }
 

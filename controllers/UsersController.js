@@ -6,8 +6,8 @@ class UsersController {
         try {
             let page = parseInt(req.query.page, 10) || 1;
             let limit = parseInt(req.query.limit, 10) || 10;
-            let order_by = req.query.orderBy || "id";
-            let order_dir = req.query.orderDir || "ASC";
+            let order_by = req.query.order_by || "id";
+            let order_dir = req.query.order_dir || "ASC";
             const allowed = ["id", "login", "rating"];
             if (!allowed.includes(order_by)) {
                 order_by = "id";

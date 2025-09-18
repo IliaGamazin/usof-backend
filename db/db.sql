@@ -44,32 +44,47 @@ CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS posts_categories (
+    id INT UNSIGNED AUTO_INCREMENT,
     post_id INT UNSIGNED NOT NULL,
     category_id INT UNSIGNED NOT NULL,
 
-    PRIMARY KEY(post_id, category_id),
+    PRIMARY KEY(id, post_id, category_id),
     FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
 );
 
--- CREATE TABLE IF NOT EXISTS users_favourites (
---
--- );
---
--- CREATE TABLE IF NOT EXISTS users_subscriptions (
---
--- );
+CREATE TABLE IF NOT EXISTS users_favourites (
+    id INT UNSIGNED AUTO_INCREMENT,
+    user_id INT UNSIGNED NOT NULL,
+    post_id INT UNSIGNED NOT NULL,
+
+    PRIMARY KEY(id, user_id, post_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS users_subscriptions (
+    id INT UNSIGNED AUTO_INCREMENT,
+    user_id INT UNSIGNED NOT NULL,
+    post_id INT UNSIGNED NOT NULL,
+
+    PRIMARY KEY(id, user_id, post_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
+);
 
 CREATE TABLE IF NOT EXISTS comments (
     id INT UNSIGNED AUTO_INCREMENT,
-    author_id INT UNSIGNED NOT NULL UNIQUE,
+    author_id INT UNSIGNED NOT NULL,
     content TEXT NOT NULL,
-    commentable_type ENUM('POST', 'ANSWER') NOT NULL,
-    commentable_id INT UNSIGNED NOT NULL,
+    post_id INT UNSIGNED NOT NULL,
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
     PRIMARY KEY(id)
-);
+)
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
