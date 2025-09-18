@@ -53,11 +53,12 @@ class UserService {
         return user;
     }
 
-    async update_user(id, login, firstname, lastname, email, password, user_role) {
-        const same = await User.get_all({ login, email });
-
-        if (same.length > 0) {
-            throw new ConflictException("User with login/email already exists");
+    async update_user(id, login, firstname, lastname, password, user_role) {
+        if (login !== undefined && login !== null) {
+            const same_login = await User.find({ login });
+            if (same_login) {
+                throw new ConflictException("User with login already exists");
+            }
         }
 
         const user = await User.find({ id });
@@ -72,10 +73,17 @@ class UserService {
             }
         }
 
-        user.login = login;
-        user.firstname = firstname;
-        user.lastname = lastname;
-        user.email = email;
+        if (login !== undefined && login !== null) {
+            user.login = login;
+        }
+
+        if (firstname !== undefined && firstname !== null) {
+            user.firstname = firstname;
+        }
+
+        if (lastname !== undefined && lastname !== null) {
+            user.lastname = lastname;
+        }
 
         console.log(user);
 

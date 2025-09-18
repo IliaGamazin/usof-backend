@@ -29,7 +29,6 @@ router.patch("/avatar",
 );
 
 router.patch("/:user_id",
-    validator.validate(schema.update_user),
     authenticator.require_auth(),
     controller.update_user
 );

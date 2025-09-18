@@ -25,12 +25,11 @@ router.post("/",
     controller.new_category
 );
 router.patch("/:category_id",
-    validator.validate(schema.update_category),
     authenticator.require_auth(["ADMIN"]),
     controller.update_category
 );
 router.delete("/:category_id",
-    authenticator.require_auth("ADMIN"),
+    authenticator.require_auth(["ADMIN"]),
     controller.delete_category
 );
 

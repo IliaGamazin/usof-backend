@@ -64,7 +64,8 @@ class UsersController {
                 email,
                 password,
                 password_confirmation,
-                role);
+                role
+            );
             return res.status(201).send();
         }
         catch (error) {
@@ -84,7 +85,6 @@ class UsersController {
                 login,
                 firstname,
                 lastname,
-                email,
                 password
             } = req.body;
             await UserService.update_user(
@@ -92,7 +92,6 @@ class UsersController {
                 login,
                 firstname,
                 lastname,
-                email,
                 password,
                 user_role
             );

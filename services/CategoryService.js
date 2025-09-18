@@ -65,10 +65,11 @@ class CategoryService {
     }
 
     async update_category(id, title, description) {
-        const same = await Category.get_all({ title });
-
-        if (same.length > 0) {
-            throw new ConflictException("Category with title already exists");
+        if (title !== undefined && title !== null) {
+            const same = await Category.find({ title });
+            if (same && same.id !== parseInt(id)) {
+                throw new ConflictException("Category with title already exists");
+            }
         }
 
         const category = await Category.find({ id });
@@ -76,8 +77,13 @@ class CategoryService {
             throw new CredentialsException("No category with id");
         }
 
-        category.title = title;
-        category.description = description;
+        if (title !== undefined && title !== null) {
+            category.title = title;
+        }
+
+        if (description !== undefined && description !== null) {
+            category.description = description;
+        }
 
         console.log(category);
 

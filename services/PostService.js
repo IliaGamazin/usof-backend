@@ -66,6 +66,33 @@ class PostService {
         return { post, info_arr };
     }
 
+    async update_post(id, author_id, title, content, categories, files) {
+        let post = await Post.find({ id });
+        if (!post) {
+            throw new CredentialsException("No post with id");
+        }
+
+        if (post.author_id !== author_id) {
+            throw new PermissionException("Permission denied");
+        }
+
+        const categories_ids = await CategoryService.parse_categories(categories)
+        await CategoryService.save_categories(id, categories_ids);
+
+        post.title = title;
+        post.content = content;
+
+        await FileService.delete_post_directory(id);
+        let info_arr = [];
+        for (let i = 0; i < files.length; i++) {
+            const info = await FileService.save_image(files[i], `posts/${id}`, i);
+            info_arr.push(info);
+        }
+        await post.save();
+
+        return { post, info_arr };
+    }
+
     async delete_post(id, requestor) {
         const post = await Post.find({ id });
         if (!post) {

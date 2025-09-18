@@ -52,6 +52,7 @@ router.post("/:post_id/like",
 
 router.patch("/:post_id",
     authenticator.require_auth(),
+    upload.array("images"),
     controller.update_post
 );
 

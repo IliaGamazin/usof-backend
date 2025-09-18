@@ -112,7 +112,18 @@ class PostsController {
 
     async update_post(req, res, next) {
         try {
+            console.log(req.body);
+            const files = req.files;
+            const author = req.user.id;
+            const id = req.params.post_id;
 
+            const { title, content, categories } = req.body;
+            const categories_arr = Array.isArray(req.body.categories)
+                ? req.body.categories
+                : (req.body.categories ? [req.body.categories] : []);
+
+            const result = await PostService.update_post(id, author, title, content, categories_arr, files);
+            res.status(204).json(result);
         }
         catch (error) {
             next(error);
