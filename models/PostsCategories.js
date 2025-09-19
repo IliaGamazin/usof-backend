@@ -9,4 +9,3 @@ class PostsCategories extends Model {
 }
 
 module.exports = PostsCategories;
-

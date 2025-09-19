@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const CredentialsException = require("../exceptions/CredentialsException");
+const PostImage = require("../models/PostImage");
 
 class FileService {
     constructor(base = "vault") {
@@ -40,15 +41,22 @@ class FileService {
         };
     }
 
-    async get_post_images(post_id) {
-        const post_dir = path.join(this.base, 'posts', post_id.toString());
-
-        if (!fs.existsSync(post_dir)) {
-            return [];
+    async save_post_images(id, files) {
+        let info_arr = [];
+        for (let i = 0; i < files.length; i++) {
+            const info = await this.save_image(
+                files[i],
+                `posts/${id}`,
+                `${files[i].originalname}_${i}_$${Date.now()}`,
+            );
+            const post_image = new PostImage({
+                post_id: id,
+                file_path: info.url
+            });
+            await post_image.save();
+            info_arr.push(info);
         }
-
-        const files = fs.readdirSync(post_dir);
-        return files.map(filename => `/vault/posts/${post_id}/${filename}`);
+        return info_arr
     }
 
     async save_image(file, sub_dir, filename) {

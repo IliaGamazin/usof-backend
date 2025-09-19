@@ -84,12 +84,12 @@ class CategoriesController {
 
     async update_category(req, res, next) {
         try {
-            await CategoryService.update_category(
+            const result = await CategoryService.update_category(
                 req.params.category_id,
                 req.body.title,
                 req.body.description
             );
-            return res.status(204).send();
+            return res.status(204).json(result);
         }
         catch (error) {
             next(error);

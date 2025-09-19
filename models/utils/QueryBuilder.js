@@ -51,12 +51,10 @@ async function query_join({
     let sql = `SELECT ${select} FROM ${table}`;
     const values = [];
 
-    // Add JOINs
     for (const join of joins) {
         sql += ` ${join.type || 'INNER'} JOIN ${join.table} ON ${join.condition}`;
     }
 
-    // Add WHERE conditions
     const whereConditions = [];
     for (const [key, value] of Object.entries(where)) {
         whereConditions.push(`${key} = ?`);
@@ -67,12 +65,10 @@ async function query_join({
         sql += ` WHERE ${whereConditions.join(' AND ')}`;
     }
 
-    // Add ORDER BY only if specified (important for count queries)
     if (order_by) {
         sql += ` ORDER BY ${order_by} ${order_dir}`;
     }
 
-    // Add LIMIT and OFFSET
     if (limit) {
         sql += ` LIMIT ${limit}`;
         if (offset) {

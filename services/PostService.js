@@ -2,6 +2,7 @@ const Post = require("../models/Post");
 const User = require("../models/User");
 const PostsCategories = require("../models/PostsCategories");
 const Category = require("../models/Category");
+const PostImage = require("../models/PostImage");
 
 const CredentialsException = require("../exceptions/CredentialsException");
 
@@ -16,7 +17,7 @@ class PostService {
             throw new CredentialsException("No post with id");
         }
 
-        const images = await FileService.get_post_images(id);
+        const images = await PostImage.get_all({post_id: id});
         return { post, images };
     }
 
@@ -57,21 +58,13 @@ class PostService {
 
         const id = await post.save();
 
-        console.log(id);
-        console.log(categories);
-        console.log(categories_ids);
-
         await CategoryService.save_categories(id, categories_ids);
 
-        let info_arr = [];
-        for (let i = 0; i < files.length; i++) {
-            const info = await FileService.save_image(files[i], `posts/${id}`, i);
-            info_arr.push(info);
-        }
+        const info_arr = await FileService.save_post_images(files)
         return { post, info_arr };
     }
 
-    async update_post(id, author_id, title, content, categories, files) {
+    async update_post(id, author_id, title, content, categories, files_to_delete, files) {
         let post = await Post.find({ id });
         if (!post) {
             throw new CredentialsException("No post with id");
@@ -81,21 +74,33 @@ class PostService {
             throw new PermissionException("Permission denied");
         }
 
+        if (title !== undefined && title !== null) {
+            post.title = title;
+        }
+
+        if (content !== undefined && content !== null) {
+            post.content = content;
+        }
+
         const categories_ids = await CategoryService.parse_categories(categories)
         await CategoryService.save_categories(id, categories_ids);
 
-        post.title = title;
-        post.content = content;
-
-        await FileService.delete_post_directory(id);
-        let info_arr = [];
-        for (let i = 0; i < files.length; i++) {
-            const info = await FileService.save_image(files[i], `posts/${id}`, i);
-            info_arr.push(info);
+        if (files_to_delete && files_to_delete.length > 0) {
+            const post_images = await PostImage.get_all({ post_id: id });
+            console.log(post_images);
+            for (const post_image of post_images) {
+                const image = await PostImage.find({ id: post_image.id });
+                await image.delete();
+            }
         }
-        await post.save();
 
-        return { post, info_arr };
+        if (files !== undefined && files !== null && files.length > 0) {
+            await FileService.save_post_images(id, files)
+        }
+
+        await post.save();
+        const images = await PostImage.get_all({post_id: id});
+        return { post, images };
     }
 
     async delete_post(id, requestor) {
@@ -105,11 +110,6 @@ class PostService {
         }
         if (requestor.id !== post.author_id && requestor.role !== "ADMIN") {
             throw new PermissionException("Permission denied");
-        }
-
-        const pc = await PostsCategories.get_all({ post_id: id });
-        for (const pc1 of pc) {
-            await pc1.delete();
         }
 
         await post.delete();

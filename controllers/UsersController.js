@@ -71,7 +71,7 @@ class UsersController {
                 return res.status(403).send()
             }
 
-            await UserService.update_user(
+            const result = await UserService.update_user(
                 id,
                 req.body.login,
                 req.body.firstname,
@@ -80,7 +80,7 @@ class UsersController {
                 user_role
             );
 
-            return res.status(204).send();
+            return res.status(204).json(result);
         }
         catch (error) {
             next(error);

@@ -53,6 +53,15 @@ CREATE TABLE IF NOT EXISTS posts_categories (
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS post_images (
+    id INT UNSIGNED AUTO_INCREMENT,
+    post_id INT UNSIGNED NOT NULL,
+    file_path VARCHAR(500) NOT NULL,
+
+    PRIMARY KEY(id),
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS users_favourites (
     id INT UNSIGNED AUTO_INCREMENT,
     user_id INT UNSIGNED NOT NULL,

@@ -1,6 +1,6 @@
 const { z } = require('zod');
 
-const {login, password, email, name} = require('./GeneralSchemas');
+const { login, password, email, name } = require('./GeneralSchemas');
 
 const schema = {
     register: z.object({
