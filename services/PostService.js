@@ -2,6 +2,7 @@ const Post = require("../models/Post");
 const User = require("../models/User");
 const PostsCategories = require("../models/PostsCategories");
 const Category = require("../models/Category");
+const Comment = require("../models/Comment");
 const PostImage = require("../models/PostImage");
 
 const CredentialsException = require("../exceptions/CredentialsException");
@@ -34,6 +35,20 @@ class PostService {
             res.push(category);
         }
         return res;
+    }
+
+    async get_post_comments(id, page, limit, order_by, order_dir) {
+        const post = await Post.find({ id });
+        if (!post) {
+            throw new CredentialsException("No post with id");
+        }
+
+        return await Comment.get_all_paged({
+            where: { post_id: id },
+            limit,
+            order_by,
+            order_dir,
+        });
     }
 
     async new_post(author_id, title, content, categories, files) {

@@ -47,7 +47,7 @@ class UsersController {
 
     async new_user(req, res, next) {
         try {
-            await UserService.new_user(
+            const result = await UserService.new_user(
                 req.body.login,
                 req.body.firstname,
                 req.body.lastname,
@@ -56,7 +56,7 @@ class UsersController {
                 req.body.password_confirmation,
                 req.body.role
             );
-            return res.status(201).send();
+            return res.status(200).json(result);
         }
         catch (error) {
             next(error);
@@ -76,8 +76,6 @@ class UsersController {
                 req.body.login,
                 req.body.firstname,
                 req.body.lastname,
-                req.body.password,
-                user_role
             );
 
             return res.status(204).json(result);

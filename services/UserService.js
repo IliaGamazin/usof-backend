@@ -51,7 +51,7 @@ class UserService {
         return user;
     }
 
-    async update_user(id, login, firstname, lastname, password, user_role) {
+    async update_user(id, login, firstname, lastname) {
         if (login !== undefined && login !== null) {
             const same_login = await User.find({ login });
             if (same_login) {
@@ -62,13 +62,6 @@ class UserService {
         const user = await User.find({ id });
         if (!user) {
             throw new CredentialsException("No user with id");
-        }
-
-        if (user_role !== "ADMIN") {
-            const valid = await bcrypt.compare(password, user.password);
-            if (!valid) {
-                throw new CredentialsException("Incorrect password");
-            }
         }
 
         if (login !== undefined && login !== null) {

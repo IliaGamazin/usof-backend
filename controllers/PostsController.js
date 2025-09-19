@@ -1,6 +1,7 @@
 const Post = require("../models/Post");
 
 const PostService = require("../services/PostService");
+const CommentService = require("../services/CommentService");
 
 class PostsController {
     async get_posts(req, res, next) {
@@ -26,7 +27,7 @@ class PostsController {
                     condition: "pc.post_id = posts.id",
                     type: "INNER"
                 });
-                where["pc.category_id"] = categories; // will trigger IN (...)
+                where["pc.category_id"] = categories;
             }
 
             const result = await Post.get_joined_paged({
@@ -48,8 +49,9 @@ class PostsController {
 
     async get_post(req, res, next) {
         try {
-            const id = req.params.post_id;
-            const post = await PostService.get_post(id);
+            const post = await PostService.get_post(
+                req.params.post_id
+            );
 
             if (post.status === "INACTIVE" && req.user.role !== "ADMIN") {
                 return res.status(403).send();
@@ -64,7 +66,20 @@ class PostsController {
 
     async get_post_comments(req, res, next) {
         try {
+            let page = parseInt(req.query.page, 10) || 1;
+            let limit = parseInt(req.query.limit, 10) || 10;
+            let order_by = req.query.order_by || "created_at";
+            let order_dir = req.query.order_dir || "DESC";
 
+            const result = await PostService.get_post_comments(
+                req.params.post_id,
+                page,
+                limit,
+                order_by,
+                order_dir,
+            );
+
+            res.status(200).json(result);
         }
         catch (error) {
             next(error);
@@ -73,7 +88,20 @@ class PostsController {
 
     async new_post_comment(req, res, next) {
         try {
+            const id = req.params.post_id;
+            const post = await PostService.get_post(id);
 
+            if (post.status === "INACTIVE" && req.user.role !== "ADMIN") {
+                return res.status(403).send();
+            }
+
+            const result = await CommentService.new_comment(
+                id,
+                req.user.id,
+                req.body.content
+            );
+
+            res.status(200).json(result);
         }
         catch (error) {
             next(error);
@@ -84,7 +112,7 @@ class PostsController {
         try {
             const id = req.params.post_id;
             const categories = await PostService.get_post_categories(id);
-            res.status(200).json({categories});
+            res.status(200).json({ categories });
         }
         catch (error) {
             next(error);
@@ -139,7 +167,6 @@ class PostsController {
             const files_to_delete_arr = Array.isArray(req.body.files_to_delete)
                 ? req.body.files_to_delete
                 : (req.body.files_to_delete ? [req.body.files_to_delete] : []);
-
 
             const result = await PostService.update_post(
                 req.params.post_id,
