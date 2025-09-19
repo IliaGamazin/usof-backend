@@ -29,6 +29,16 @@ router.post("/:post_id/comments",
     controller.new_post_comment
 );
 
+// router.post("/:post_id/subscribe",
+//     authenticator.require_auth(),
+//     controller.post_subscribe()
+// );
+//
+// router.post("/:post_id/favourite",
+//     authenticator.require_auth(),
+//     controller.post_favourite()
+// );
+
 router.get("/:post_id/categories",
     authenticator.require_auth(),
     controller.get_post_categories

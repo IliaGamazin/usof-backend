@@ -60,17 +60,17 @@ class Model {
                                       limit = 10,
                                       order_by = "id",
                                       order_dir = "ASC",
-                                      select = null
+                                      select = null,
+                                      group_by = null   // <-- NEW
                                   } = {}) {
         const offset = (page - 1) * limit;
-
         const selectFields = select || `${this.table_name}.*`;
 
         const countResult = await QueryBuilder.query_join({
             table: this.table_name,
             joins,
             where,
-            select: 'COUNT(*) as count'
+            select: `COUNT(DISTINCT ${this.table_name}.id) as count`
         });
         const total = countResult[0].count;
         const total_pages = Math.ceil(total / limit);
@@ -83,7 +83,8 @@ class Model {
             limit,
             offset,
             order_by,
-            order_dir
+            order_dir,
+            group_by
         });
 
         return {

@@ -84,6 +84,12 @@ class PostService {
             post.content = content;
         }
 
+        const curr_categories = await PostsCategories.get_all({ post_id: id });
+        for (const cc of curr_categories) {
+            const pc = await PostsCategories.find({ id: cc.id });
+            await pc.delete();
+        }
+
         const categories_ids = await CategoryService.parse_categories(categories)
         await CategoryService.save_categories(id, categories_ids);
 

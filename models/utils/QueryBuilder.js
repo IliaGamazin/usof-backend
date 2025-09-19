@@ -46,7 +46,8 @@ async function query_join({
                               limit = null,
                               offset = null,
                               order_by = null,
-                              order_dir = 'ASC'
+                              order_dir = 'ASC',
+                              group_by = null
                           } = {}) {
     let sql = `SELECT ${select} FROM ${table}`;
     const values = [];
@@ -60,8 +61,7 @@ async function query_join({
         if (Array.isArray(value)) {
             whereConditions.push(`${key} IN (${value.map(() => '?').join(',')})`);
             values.push(...value);
-        }
-        else {
+        } else {
             whereConditions.push(`${key} = ?`);
             values.push(value);
         }
@@ -71,7 +71,13 @@ async function query_join({
         sql += ` WHERE ${whereConditions.join(' AND ')}`;
     }
 
+    if (group_by) {
+        sql += ` GROUP BY ${group_by}`;
+    }
+
     if (order_by) {
+        const allowedDirs = ["ASC", "DESC"];
+        order_dir = allowedDirs.includes(order_dir.toUpperCase()) ? order_dir.toUpperCase() : "ASC";
         sql += ` ORDER BY ${order_by} ${order_dir}`;
     }
 
