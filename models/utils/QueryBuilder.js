@@ -57,8 +57,14 @@ async function query_join({
 
     const whereConditions = [];
     for (const [key, value] of Object.entries(where)) {
-        whereConditions.push(`${key} = ?`);
-        values.push(value);
+        if (Array.isArray(value)) {
+            whereConditions.push(`${key} IN (${value.map(() => '?').join(',')})`);
+            values.push(...value);
+        }
+        else {
+            whereConditions.push(`${key} = ?`);
+            values.push(value);
+        }
     }
 
     if (whereConditions.length > 0) {

@@ -12,15 +12,31 @@ class PostsController {
             let where = {};
 
             if (req.user.role !== "ADMIN") {
-                where = { status: "ACTIVE" };
+                where.status = "ACTIVE";
             }
 
-            const result = await Post.get_all_paged({
+            let categories = req.query.categories
+                ? req.query.categories.split(",").map(Number)
+                : [];
+
+            const joins = [];
+            if (categories.length > 0) {
+                joins.push({
+                    table: "posts_categories pc",
+                    condition: "pc.post_id = posts.id",
+                    type: "INNER"
+                });
+                where["pc.category_id"] = categories; // will trigger IN (...)
+            }
+
+            const result = await Post.get_joined_paged({
+                joins,
                 where,
                 page,
                 limit,
                 order_by,
                 order_dir,
+                select: "posts.*"
             });
 
             res.json(result);

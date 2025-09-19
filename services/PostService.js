@@ -46,6 +46,8 @@ class PostService {
             updated_at: new Date(),
         });
 
+        console.log(files);
+
         if (!await User.find(author_id)) {
             throw new CredentialsException("No author with id");
         }
@@ -60,7 +62,7 @@ class PostService {
 
         await CategoryService.save_categories(id, categories_ids);
 
-        const info_arr = await FileService.save_post_images(files)
+        const info_arr = await FileService.save_post_images(id, files)
         return { post, info_arr };
     }
 
