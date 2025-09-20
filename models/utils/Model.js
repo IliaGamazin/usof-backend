@@ -61,7 +61,7 @@ class Model {
                                       order_by = "id",
                                       order_dir = "ASC",
                                       select = null,
-                                      group_by = null   // <-- NEW
+                                      group_by = null
                                   } = {}) {
         const offset = (page - 1) * limit;
         const selectFields = select || `${this.table_name}.*`;

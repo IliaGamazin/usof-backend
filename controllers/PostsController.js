@@ -90,7 +90,7 @@ class PostsController {
         try {
             let page = parseInt(req.query.page, 10) || 1;
             let limit = parseInt(req.query.limit, 10) || 10;
-            let order_by = req.query.order_by || "created_at";
+            let order_by = req.query.order_by || "score";
             let order_dir = req.query.order_dir || "DESC";
 
             const result = await PostService.get_post_comments(
@@ -146,7 +146,12 @@ class PostsController {
 
     async get_post_likes(req, res, next) {
         try {
+            const result = await PostService.get_post_likes(
+                req.params.post_id,
+                req.user
+            );
 
+            return res.status(200).json(result);
         }
         catch (error) {
             next(error);
@@ -186,6 +191,7 @@ class PostsController {
                 req.user,
                 type
             );
+
             return res.status(201).send();
         }
         catch (error) {

@@ -1,6 +1,8 @@
 const Comment = require("../models/Comment");
 const CredentialsException = require("../exceptions/CredentialsException");
 const PermissionException = require("../exceptions/PermissionException");
+const User = require("../models/User");
+const CommentLike = require("../models/CommentLike");
 
 class CommentService {
     async get_comment(id) {
@@ -9,7 +11,17 @@ class CommentService {
             throw new CredentialsException("No comment with id");
         }
 
-        return comment;
+        console.log(id);
+        console.log(comment);
+
+        const likes = await CommentLike.get_all({ comment_id: id });
+        const score = likes.reduce((acc, like) => {
+            if (like.reaction === "LIKE") return acc + 1;
+            if (like.reaction === "DISLIKE") return acc - 1;
+            return acc;
+        }, 0);
+
+        return { comment, score: score };
     }
 
     async new_comment(post_id, author_id, content) {
@@ -23,6 +35,15 @@ class CommentService {
 
         await comment.save();
         return comment;
+    }
+
+    async get_comment_likes(id) {
+        const comment = await Comment.find({ id });
+        if (!comment) {
+            throw new CredentialsException("No comment with id");
+        }
+
+        return await CommentLike.get_all({ comment_id: id });
     }
 
     async update_comment(id, content, requestor) {
@@ -43,6 +64,55 @@ class CommentService {
         return comment;
     }
 
+    async new_comment_like(id, user, reaction) {
+        const comment = await Comment.find({ id });
+        if (!comment) {
+            throw new CredentialsException("No comment with id");
+        }
+
+        const author = await User.find({ id: comment.author_id });
+        const same = await CommentLike.find({
+            user_id: user.id ,
+            comment_id: id,
+        });
+
+        if (same) {
+            same.reaction === "LIKE" ? author.rating-- : author.rating++;
+            await same.delete();
+            await author.save();
+        }
+
+        reaction === "LIKE" ? author.rating++ : author.rating--;
+        const like = new CommentLike({
+            user_id: user.id,
+            comment_id: id,
+            reaction
+        });
+
+        await author.save();
+        await like.save();
+    }
+
+    async delete_comment_like(id, user_id) {
+        const comment = await Comment.find({ id });
+        if (!comment) {
+            throw new CredentialsException("No comment with id");
+        }
+
+        const author = await User.find({ id: comment.author_id });
+        const like = await CommentLike.find({
+            user_id: user_id ,
+            comment_id: id,
+        });
+
+        if (!like) {
+            throw new CredentialsException("No like for comment from user");
+        }
+
+        like.reaction === "LIKE" ? author.rating-- : author.rating++;
+        await like.delete();
+        await author.save();
+    }
 
     async delete_comment(id, requestor) {
         const comment = await Comment.find({ id });

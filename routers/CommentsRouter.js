@@ -9,15 +9,15 @@ router.get("/:comment_id",
     controller.get_comment
 );
 
-// router.get("/:comment_id/like",
-//     authenticator.require_auth(),
-//     controller.get_comment_likes
-// );
-//
-// router.post("/:comment_id/like",
-//     authenticator.require_auth(),
-//     controller.new_comment_like
-// );
+router.get("/:comment_id/like",
+    authenticator.require_auth(),
+    controller.get_comment_likes
+);
+
+router.post("/:comment_id/like",
+    authenticator.require_auth(),
+    controller.new_comment_like
+);
 
 router.patch("/:comment_id",
     authenticator.require_auth(),
@@ -29,10 +29,10 @@ router.delete("/:comment_id",
     controller.delete_comment
 );
 
-// router.delete("/:comment_id/like",
-//     authenticator.require_auth(),
-//     controller.delete_comment_like
-// );
+router.delete("/:comment_id/like",
+    authenticator.require_auth(),
+    controller.delete_comment_like
+);
 
 
 module.exports = router;

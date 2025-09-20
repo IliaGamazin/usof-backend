@@ -19,8 +19,15 @@ class PostService {
             throw new CredentialsException("No post with id");
         }
 
+        const likes = await Like.get_all({ post_id: id });
+        const score = likes.reduce((acc, like) => {
+            if (like.reaction === "LIKE") return acc + 1;
+            if (like.reaction === "DISLIKE") return acc - 1;
+            return acc;
+        }, 0);
+
         const images = await PostImage.get_all({ post_id: id });
-        return { post, images };
+        return { post, images, score: score };
     }
 
     async get_post_categories(id, requestor) {
@@ -52,11 +59,30 @@ class PostService {
             throw new PermissionException();
         }
 
-        return await Comment.get_all_paged({
+        const joins = [{
+            table: "comment_likes cl",
+            condition: "cl.comment_id = comments.id",
+            type: "LEFT"
+        }];
+
+        return await Comment.get_joined_paged({
+            joins,
             where: { post_id: id },
+            page,
             limit,
-            order_by,
-            order_dir,
+            select: `
+            comments.*,
+            SUM(cl.reaction = 'LIKE') as like_count,
+            SUM(cl.reaction = 'DISLIKE') as dislike_count,
+            (SUM(cl.reaction = 'LIKE') - SUM(cl.reaction = 'DISLIKE')) as score
+        `,
+            group_by: "comments.id",
+            order_by:
+                order_by === "likes" ? "like_count"
+                    : order_by === "dislikes" ? "dislike_count"
+                        : order_by === "score" ? "score"
+                            : `comments.${order_by}`,
+            order_dir
         });
     }
 
@@ -121,6 +147,19 @@ class PostService {
         await like.save();
     }
 
+    async get_post_likes(id, requestor) {
+        const post = await Post.find({ id });
+        if (!post) {
+            throw new CredentialsException("No post with id");
+        }
+
+        if (post.status === "INACTIVE" && requestor.role !== "ADMIN") {
+            throw new PermissionException();
+        }
+
+        return await Like.get_all({ post_id: id });
+    }
+
     async delete_post_like(id, user_id) {
         const post = await Post.find({ id });
         if (!post) {
@@ -174,11 +213,11 @@ class PostService {
         await CategoryService.save_categories(id, categories_ids);
 
         if (files_to_delete && files_to_delete.length > 0) {
-            const post_images = await PostImage.get_all({ post_id: id });
-            console.log(post_images);
-            for (const post_image of post_images) {
-                const image = await PostImage.find({ id: post_image.id });
-                await image.delete();
+            for (const file_id of files_to_delete) {
+                const image = await PostImage.find({ id: file_id });
+                if (image && image.post_id === post.id) {
+                    await image.delete();
+                }
             }
         }
 
