@@ -4,6 +4,7 @@ const PostsCategories = require("../models/PostsCategories");
 const Category = require("../models/Category");
 const Comment = require("../models/Comment");
 const PostImage = require("../models/PostImage");
+const Like = require("../models/Like");
 
 const CredentialsException = require("../exceptions/CredentialsException");
 
@@ -18,14 +19,18 @@ class PostService {
             throw new CredentialsException("No post with id");
         }
 
-        const images = await PostImage.get_all({post_id: id});
+        const images = await PostImage.get_all({ post_id: id });
         return { post, images };
     }
 
-    async get_post_categories(id) {
+    async get_post_categories(id, requestor) {
         const post = await Post.find({ id });
         if (!post) {
             throw new CredentialsException("No post with id");
+        }
+
+        if (post.status === "INACTIVE" && requestor.role !== "ADMIN") {
+            throw new PermissionException();
         }
 
         let res = []
@@ -37,10 +42,14 @@ class PostService {
         return res;
     }
 
-    async get_post_comments(id, page, limit, order_by, order_dir) {
+    async get_post_comments(id, page, limit, order_by, order_dir, requestor) {
         const post = await Post.find({ id });
         if (!post) {
             throw new CredentialsException("No post with id");
+        }
+
+        if (post.status === "INACTIVE" && requestor.role !== "ADMIN") {
+            throw new PermissionException();
         }
 
         return await Comment.get_all_paged({
@@ -61,8 +70,6 @@ class PostService {
             updated_at: new Date(),
         });
 
-        console.log(files);
-
         if (!await User.find(author_id)) {
             throw new CredentialsException("No author with id");
         }
@@ -81,7 +88,61 @@ class PostService {
         return { post, info_arr };
     }
 
-    async update_post(id, author_id, title, content, categories, files_to_delete, files) {
+    async new_post_like(id, user, reaction) {
+        const post = await Post.find({ id });
+        if (!post) {
+            throw new CredentialsException("No post with id");
+        }
+
+        if (post.status === "INACTIVE" && user.role !== "ADMIN") {
+            throw new PermissionException();
+        }
+
+        const author = await User.find({ id: post.author_id });
+        const same = await Like.find({
+            user_id: user.id ,
+            post_id: id,
+        });
+
+        if (same) {
+            same.reaction === "LIKE" ? author.rating-- : author.rating++;
+            await same.delete();
+            await author.save();
+        }
+
+        reaction === "LIKE" ? author.rating++ : author.rating--;
+        const like = new Like({
+            user_id: user.id,
+            post_id: id,
+            reaction
+        });
+
+        await author.save();
+        await like.save();
+    }
+
+    async delete_post_like(id, user_id) {
+        const post = await Post.find({ id });
+        if (!post) {
+            throw new CredentialsException("No post with id");
+        }
+
+        const author = await User.find({ id: post.author_id });
+        const like = await Like.find({
+            user_id: user_id ,
+            post_id: id,
+        });
+
+        if (!like) {
+            throw new CredentialsException("No like for post from user");
+        }
+
+        like.reaction === "LIKE" ? author.rating-- : author.rating++;
+        await like.delete();
+        await author.save();
+    }
+
+    async update_post(id, author_id, title, content, categories, files_to_delete, files, status) {
         let post = await Post.find({ id });
         if (!post) {
             throw new CredentialsException("No post with id");
@@ -97,6 +158,10 @@ class PostService {
 
         if (content !== undefined && content !== null) {
             post.content = content;
+        }
+
+        if (status === "ACTIVE" || status === "INACTIVE") {
+            post.status = status;
         }
 
         const curr_categories = await PostsCategories.get_all({ post_id: id });

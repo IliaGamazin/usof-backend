@@ -21,6 +21,21 @@ class CommentsController {
         }
     }
 
+    async update_comment(req, res, next) {
+        try {
+            const result = await CommentService.update_comment(
+                req.params.comment_id,
+                req.body.content,
+                req.user
+            );
+
+            res.status(204).json(result);
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+
     async delete_comment(req, res, next) {
         try {
             await CommentService.delete_comment(

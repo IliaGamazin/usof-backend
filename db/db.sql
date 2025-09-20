@@ -97,3 +97,14 @@ CREATE TABLE IF NOT EXISTS comments (
 )
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS likes (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED NOT NULL,
+    post_id INT UNSIGNED NOT NULL,
+    reaction ENUM('LIKE', 'DISLIKE') NOT NULL,
+
+    UNIQUE KEY uq_reaction (user_id, post_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
+);

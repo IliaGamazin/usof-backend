@@ -86,6 +86,8 @@ class CategoryService {
         return category;
     }
 
+
+
     async delete_category(id) {
         const category = await Category.find({ id });
         if (!category) {

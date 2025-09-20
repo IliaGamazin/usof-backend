@@ -8,7 +8,7 @@ class PostsController {
         try {
             let page = parseInt(req.query.page, 10) || 1;
             let limit = parseInt(req.query.limit, 10) || 10;
-            let order_by = req.query.order_by || "created_at";
+            let order_by = req.query.order_by || "score";
             let order_dir = req.query.order_dir || "DESC";
             let where = {};
 
@@ -16,11 +16,17 @@ class PostsController {
                 where.status = "ACTIVE";
             }
 
-            let categories = req.query.categories
-                ? req.query.categories.split(",").map(Number)
-                : [];
+            let categories = [];
+            if (req.query.categories) {
+                if (Array.isArray(req.query.categories)) {
+                    categories = req.query.categories.map(Number);
+                } else {
+                    categories = req.query.categories.split(",").map(Number);
+                }
+            }
 
             const joins = [];
+
             if (categories.length > 0) {
                 joins.push({
                     table: "posts_categories pc",
@@ -30,17 +36,33 @@ class PostsController {
                 where["pc.category_id"] = categories;
             }
 
+            joins.push({
+                table: "likes l",
+                condition: "l.post_id = posts.id",
+                type: "LEFT"
+            });
+
             const result = await Post.get_joined_paged({
                 joins,
                 where,
                 page,
                 limit,
-                order_by,
-                order_dir,
-                select: "posts.*"
+                select: `
+                posts.*,
+                SUM(l.reaction = 'LIKE') as like_count,
+                SUM(l.reaction = 'DISLIKE') as dislike_count,
+                (SUM(l.reaction = 'LIKE') - SUM(l.reaction = 'DISLIKE')) as score
+            `,
+                group_by: "posts.id",
+                order_by:
+                    order_by === "likes" ? "like_count"
+                        : order_by === "dislikes" ? "dislike_count"
+                            : order_by === "score" ? "score"
+                                : `posts.${order_by}`,
+                order_dir
             });
 
-            res.json(result);
+            return res.status(200).json(result);
         }
         catch (error) {
             next(error);
@@ -49,15 +71,15 @@ class PostsController {
 
     async get_post(req, res, next) {
         try {
-            const post = await PostService.get_post(
+            const result = await PostService.get_post(
                 req.params.post_id
             );
 
-            if (post.status === "INACTIVE" && req.user.role !== "ADMIN") {
+            if (result.post.status === "INACTIVE" && req.user.role !== "ADMIN") {
                 return res.status(403).send();
             }
 
-            res.status(200).json(post);
+            res.status(200).json(result);
         }
         catch (error) {
             next(error);
@@ -77,6 +99,7 @@ class PostsController {
                 limit,
                 order_by,
                 order_dir,
+                req.user
             );
 
             res.status(200).json(result);
@@ -110,8 +133,10 @@ class PostsController {
 
     async get_post_categories(req, res, next) {
         try {
-            const id = req.params.post_id;
-            const categories = await PostService.get_post_categories(id);
+            const categories = await PostService.get_post_categories(
+                req.params.post_id,
+                req.user
+            );
             res.status(200).json({ categories });
         }
         catch (error) {
@@ -142,7 +167,7 @@ class PostsController {
                 req.files
             );
 
-            res.status(200).json(result);
+            return res.status(200).json(result);
         }
         catch (error) {
             next(error);
@@ -151,7 +176,17 @@ class PostsController {
 
     async new_post_like(req, res, next) {
         try {
+            const type = req.query.type;
+            if (type !== "LIKE" && type !== "DISLIKE") {
+                return res.status(401).send();
+            }
 
+            await PostService.new_post_like(
+                req.params.post_id,
+                req.user,
+                type
+            );
+            return res.status(201).send();
         }
         catch (error) {
             next(error);
@@ -175,7 +210,8 @@ class PostsController {
                 req.body.content,
                 categories_arr,
                 files_to_delete_arr,
-                req.files
+                req.files,
+                req.body.status
             );
             res.status(204).json(result);
         }
@@ -190,7 +226,7 @@ class PostsController {
                 req.params.post_id,
                 req.user
             );
-            res.status(204).json();
+            return res.status(204).json();
         }
         catch (error) {
             next(error);
@@ -199,7 +235,12 @@ class PostsController {
 
     async delete_post_like(req, res, next) {
         try {
+            await PostService.delete_post_like(
+                req.params.post_id,
+                req.user.id
+            );
 
+            return res.status(204).send();
         }
         catch (error) {
             next(error);

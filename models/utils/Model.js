@@ -8,7 +8,7 @@ class Model {
     }
 
     static async find(where) {
-        const rows = await QueryBuilder.query_where(this.table_name, {where, limit: 1});
+        const rows = await QueryBuilder.query_where(this.table_name, {where, strict: true, limit: 1});
         return rows.length ? new this(rows[0]) : null;
     }
 

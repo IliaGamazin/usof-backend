@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+//const FavouritesRouter = require("./FavouritesRouter");
 
 const upload = require('../middleware/UploadMiddleware');
 const schema = require("../validation/schemas/PostSchema");
@@ -8,6 +9,8 @@ const validator = require("../middleware/ValidationMiddleware");
 const authenticator = require("../middleware/AuthMiddleware");
 
 const controller = require("../controllers/PostsController");
+
+// router.use(FavouritesRouter);
 
 router.get("/",
     authenticator.require_auth(),
@@ -28,16 +31,6 @@ router.post("/:post_id/comments",
     authenticator.require_auth(),
     controller.new_post_comment
 );
-
-// router.post("/:post_id/subscribe",
-//     authenticator.require_auth(),
-//     controller.post_subscribe()
-// );
-//
-// router.post("/:post_id/favourite",
-//     authenticator.require_auth(),
-//     controller.post_favourite()
-// );
 
 router.get("/:post_id/categories",
     authenticator.require_auth(),

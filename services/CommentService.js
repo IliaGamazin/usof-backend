@@ -25,13 +25,32 @@ class CommentService {
         return comment;
     }
 
+    async update_comment(id, content, requestor) {
+        const comment = await Comment.find({ id });
+        if (!comment) {
+            throw new CredentialsException("No comment with id");
+        }
+
+        if (requestor.id !== comment.author_id && requestor.role !== "ADMIN") {
+            throw new PermissionException();
+        }
+
+        if (content !== null && content !== undefined) {
+            comment.content = content;
+        }
+
+        await comment.save();
+        return comment;
+    }
+
+
     async delete_comment(id, requestor) {
         const comment = await Comment.find({ id });
         if (!comment) {
             throw new CredentialsException("No comment with id");
         }
 
-        if (parseInt(requestor.id) !== comment.author_id && requestor.role !== "ADMIN") {
+        if (requestor.id !== comment.author_id && requestor.role !== "ADMIN") {
             throw new PermissionException();
         }
 
