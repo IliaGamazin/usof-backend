@@ -1,5 +1,5 @@
-const pool = require("../../db/pool")
-const QueryBuilder = require("./QueryBuilder");
+import pool from "../../db/pool.js"
+import QueryBuilder from "./QueryBuilder.js";
 
 class Model {
     static table_name = "";
@@ -121,4 +121,4 @@ class Model {
     }
 }
 
-module.exports = Model;
+export default Model;

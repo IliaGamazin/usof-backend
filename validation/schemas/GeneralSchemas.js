@@ -1,4 +1,4 @@
-const {z} = require("zod");
+import { z } from 'zod';
 
 const login = z.string()
     .min(3, "Login must be at least 3 characters long")
@@ -16,4 +16,4 @@ const name = z.string() .min(2, "Name must be at least 2 characters long")
     .max(32, "Name must be at most 50 characters long")
     .regex(/^[\p{L}\p{M} -]+$/u, "Name can only contain letters, spaces, and hyphens");
 
-module.exports = { login, password, email, name };
+export { login, password, email, name };

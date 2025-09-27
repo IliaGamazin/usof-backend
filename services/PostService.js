@@ -1,22 +1,23 @@
-const Post = require("../models/Post");
-const User = require("../models/User");
-const PostsCategories = require("../models/PostsCategories");
-const Category = require("../models/Category");
-const Comment = require("../models/Comment");
-const PostImage = require("../models/PostImage");
-const Like = require("../models/Like");
+import Post from "../models/Post.js";
+import User from "../models/User.js";
+import PostsCategories from "../models/PostsCategories.js";
+import Category from "../models/Category.js";
+import Comment from "../models/Comment.js";
+import PostImage from "../models/PostImage.js";
+import Like from "../models/Like.js";
 
-const CredentialsException = require("../exceptions/CredentialsException");
+import CredentialsException from "../exceptions/CredentialsException.js";
+import NotFoundException from "../exceptions/NotFoundException.js";
 
-const FileService = require("./FileService");
-const CategoryService = require("./CategoryService");
-const PermissionException = require("../exceptions/PermissionException");
+import FileService from "./FileService.js";
+import CategoryService from "./CategoryService.js";
+import PermissionException from "../exceptions/PermissionException.js";
 
 class PostService {
     async get_post(id) {
         const post = await Post.find({ id });
         if (!post) {
-            throw new CredentialsException("No post with id");
+            throw new NotFoundException("No post with id");
         }
 
         const likes = await Like.get_all({ post_id: id });
@@ -33,7 +34,7 @@ class PostService {
     async get_post_categories(id, requestor) {
         const post = await Post.find({ id });
         if (!post) {
-            throw new CredentialsException("No post with id");
+            throw new NotFoundException("No post with id");
         }
 
         if (post.status === "INACTIVE" && requestor.role !== "ADMIN") {
@@ -52,7 +53,7 @@ class PostService {
     async get_post_comments(id, page, limit, order_by, order_dir, requestor) {
         const post = await Post.find({ id });
         if (!post) {
-            throw new CredentialsException("No post with id");
+            throw new NotFoundException("No post with id");
         }
 
         if (post.status === "INACTIVE" && requestor.role !== "ADMIN") {
@@ -97,7 +98,7 @@ class PostService {
         });
 
         if (!await User.find(author_id)) {
-            throw new CredentialsException("No author with id");
+            throw new NotFoundException("No author with id");
         }
 
         if (categories.length === 0) {
@@ -117,7 +118,7 @@ class PostService {
     async new_post_like(id, user, reaction) {
         const post = await Post.find({ id });
         if (!post) {
-            throw new CredentialsException("No post with id");
+            throw new NotFoundException("No post with id");
         }
 
         if (post.status === "INACTIVE" && user.role !== "ADMIN") {
@@ -150,7 +151,7 @@ class PostService {
     async get_post_likes(id, requestor) {
         const post = await Post.find({ id });
         if (!post) {
-            throw new CredentialsException("No post with id");
+            throw new NotFoundException("No post with id");
         }
 
         if (post.status === "INACTIVE" && requestor.role !== "ADMIN") {
@@ -184,10 +185,10 @@ class PostService {
     async update_post(id, author_id, title, content, categories, files_to_delete, files, status) {
         let post = await Post.find({ id });
         if (!post) {
-            throw new CredentialsException("No post with id");
+            throw new NotFoundException("No post with id");
         }
 
-        if (post.author_id !== author_id) {
+        if (post.author_id !== author_id ) {
             throw new PermissionException("Permission denied");
         }
 
@@ -233,7 +234,7 @@ class PostService {
     async delete_post(id, requestor) {
         const post = await Post.find({ id });
         if (!post) {
-            throw new CredentialsException("No post with id");
+            throw new NotFoundException("No post with id");
         }
         if (requestor.id !== post.author_id && requestor.role !== "ADMIN") {
             throw new PermissionException("Permission denied");
@@ -244,4 +245,4 @@ class PostService {
     }
 }
 
-module.exports = new PostService();
+export default new PostService();

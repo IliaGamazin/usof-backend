@@ -1,17 +1,17 @@
-const bcrypt = require("bcrypt");
+import bcrypt from "bcrypt";
 
-const User = require("../models/User");
-const CredentialsException = require("../exceptions/CredentialsException");
-const PermissionException = require("../exceptions/PermissionException");
-const ConflictException = require("../exceptions/ConflictException");
+import User from "../models/User.js";
+import PermissionException from "../exceptions/PermissionException.js";
+import ConflictException from "../exceptions/ConflictException.js";
+import NotFoundException from "../exceptions/NotFoundException.js";
 
-const FileService = require("./FileService");
+import FileService from "./FileService.js";
 
 class UserService {
     async get_user(id) {
         const user = await User.find({ id });
         if (!user) {
-            throw new CredentialsException("No user with id");
+            throw new NotFoundException("No user with id");
         }
 
         return {
@@ -61,7 +61,7 @@ class UserService {
 
         const user = await User.find({ id });
         if (!user) {
-            throw new CredentialsException("No user with id");
+            throw new NotFoundException("No user with id");
         }
 
         if (login !== undefined && login !== null) {
@@ -83,7 +83,7 @@ class UserService {
     async set_avatar(id, avatar) {
         const user = await User.find({ id });
         if (!user) {
-            throw new CredentialsException("No user with id");
+            throw new NotFoundException("No user with id");
         }
 
         const info = await FileService.save_image(avatar, 'avatars', id);
@@ -97,7 +97,7 @@ class UserService {
     async delete_user(id, requestor) {
         const user = await User.find({ id });
         if (!user) {
-            throw new CredentialsException("No user with id");
+            throw new NotFoundException("No user with id");
         }
 
         if (requestor.id !== user.id && requestor.role !== "ADMIN") {
@@ -113,4 +113,4 @@ class UserService {
     }
 }
 
-module.exports = new UserService();
+export default new UserService();

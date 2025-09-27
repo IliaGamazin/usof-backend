@@ -1,5 +1,5 @@
-const CommentService = require("../services/CommentService");
-const Post = require("../models/Post");
+import CommentService from "../services/CommentService.js";
+import Post from "../models/Post.js";
 
 class CommentsController {
     async get_comment(req, res, next) {
@@ -97,4 +97,4 @@ class CommentsController {
     }
 }
 
-module.exports = new CommentsController();
+export default new CommentsController();

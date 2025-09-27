@@ -1,6 +1,6 @@
-const Model = require("./utils/Model");
-const path = require("path");
-const fs = require("fs");
+import Model from "./utils/Model.js";
+import path from "path";
+import fs from "fs";
 
 class PostImage extends Model {
     static table_name = "post_images";
@@ -28,4 +28,4 @@ class PostImage extends Model {
     }
 }
 
-module.exports = PostImage;
+export default PostImage;

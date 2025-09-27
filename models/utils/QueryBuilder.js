@@ -1,4 +1,4 @@
-const pool = require("../../db/pool");
+import pool from "../../db/pool.js";
 
 async function query_where(
     table_name,
@@ -92,4 +92,4 @@ async function query_join({
     return rows;
 }
 
-module.exports = {query_where, query_join};
+export default { query_where, query_join };

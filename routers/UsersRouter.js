@@ -1,21 +1,23 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
 
-const controller = require("../controllers/UsersController");
-const upload = require('../middleware/UploadMiddleware');
-const schema = require("../validation/schemas/UserSchema");
+import controller from "../controllers/UsersController.js";
+import upload from '../middleware/UploadMiddleware.js';
+import schema from "../validation/schemas/UserSchema.js";
 
-const validator = require("../middleware/ValidationMiddleware");
-const authenticator = require("../middleware/AuthMiddleware");
+import validator from "../middleware/ValidationMiddleware.js";
+import authenticator from "../middleware/AuthMiddleware.js";
 
 router.get("/",
     authenticator.require_auth(["ADMIN"]),
     controller.get_users
 );
+
 router.get("/:user_id",
     authenticator.require_auth(),
     controller.get_user
 );
+
 router.post("/",
     validator.validate(schema.new_user),
     authenticator.require_auth(["ADMIN"]),
@@ -38,4 +40,4 @@ router.delete("/:user_id",
     controller.delete_user
 );
 
-module.exports = router;
+export default router;

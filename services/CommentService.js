@@ -1,14 +1,15 @@
-const Comment = require("../models/Comment");
-const CredentialsException = require("../exceptions/CredentialsException");
-const PermissionException = require("../exceptions/PermissionException");
-const User = require("../models/User");
-const CommentLike = require("../models/CommentLike");
+import Comment from "../models/Comment.js";
+import User from "../models/User.js";
+import CommentLike from "../models/CommentLike.js";
+
+import NotFoundException from "../exceptions/NotFoundException.js";
+import PermissionException from "../exceptions/PermissionException.js";
 
 class CommentService {
     async get_comment(id) {
         const comment = await Comment.find({ id });
         if (!comment) {
-            throw new CredentialsException("No comment with id");
+            throw new NotFoundException("No comment with id");
         }
 
         console.log(id);
@@ -40,7 +41,7 @@ class CommentService {
     async get_comment_likes(id) {
         const comment = await Comment.find({ id });
         if (!comment) {
-            throw new CredentialsException("No comment with id");
+            throw new NotFoundException("No comment with id");
         }
 
         return await CommentLike.get_all({ comment_id: id });
@@ -49,7 +50,7 @@ class CommentService {
     async update_comment(id, content, requestor) {
         const comment = await Comment.find({ id });
         if (!comment) {
-            throw new CredentialsException("No comment with id");
+            throw new NotFoundException("No comment with id");
         }
 
         if (requestor.id !== comment.author_id && requestor.role !== "ADMIN") {
@@ -67,7 +68,7 @@ class CommentService {
     async new_comment_like(id, user, reaction) {
         const comment = await Comment.find({ id });
         if (!comment) {
-            throw new CredentialsException("No comment with id");
+            throw new NotFoundException("No comment with id");
         }
 
         const author = await User.find({ id: comment.author_id });
@@ -96,7 +97,7 @@ class CommentService {
     async delete_comment_like(id, user_id) {
         const comment = await Comment.find({ id });
         if (!comment) {
-            throw new CredentialsException("No comment with id");
+            throw new NotFoundException("No comment with id");
         }
 
         const author = await User.find({ id: comment.author_id });
@@ -106,7 +107,7 @@ class CommentService {
         });
 
         if (!like) {
-            throw new CredentialsException("No like for comment from user");
+            throw new NotFoundException("No like for comment from user");
         }
 
         like.reaction === "LIKE" ? author.rating-- : author.rating++;
@@ -117,7 +118,7 @@ class CommentService {
     async delete_comment(id, requestor) {
         const comment = await Comment.find({ id });
         if (!comment) {
-            throw new CredentialsException("No comment with id");
+            throw new NotFoundException("No comment with id");
         }
 
         if (requestor.id !== comment.author_id && requestor.role !== "ADMIN") {
@@ -128,4 +129,4 @@ class CommentService {
     }
 }
 
-module.exports = new CommentService();
+export default new CommentService();

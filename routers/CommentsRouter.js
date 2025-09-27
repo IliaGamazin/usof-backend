@@ -1,7 +1,7 @@
-const express = require("express");
+import express from "express";
 
-const controller = require("../controllers/CommentsController");
-const authenticator = require("../middleware/AuthMiddleware");
+import controller from "../controllers/CommentsController.js";
+import authenticator from "../middleware/AuthMiddleware.js";
 const router = express.Router();
 
 router.get("/:comment_id",
@@ -35,4 +35,4 @@ router.delete("/:comment_id/like",
 );
 
 
-module.exports = router;
+export default router;

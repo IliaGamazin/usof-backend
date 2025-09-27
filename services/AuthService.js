@@ -1,9 +1,10 @@
-const bcrypt = require("bcrypt");
+import bcrypt from "bcrypt";
 
-const User = require("../models/User");
-const ConflictException = require("../exceptions/ConflictException");
-const CredentialsException = require("../exceptions/CredentialsException");
-const JwtService = require("./JwtService");
+import User from "../models/User.js";
+import ConflictException from "../exceptions/ConflictException.js";
+import CredentialsException from "../exceptions/CredentialsException.js";
+import NotFoundException from "../exceptions/NotFoundException.js";
+import JwtService from "./JwtService.js";
 
 class AuthService {
     async register(login, firstname, lastname, email, password, password_confirmation) {
@@ -14,6 +15,10 @@ class AuthService {
 
         if (users.length > 0) {
             throw new ConflictException("User already exists");
+        }
+
+        if (password !== password_confirmation) {
+            throw new CredentialsException("Passwords do not match");
         }
 
         const hash = await bcrypt.hash(password, 12);
@@ -36,7 +41,7 @@ class AuthService {
         const user = await User.find({login, email});
 
         if (!user) {
-            throw new CredentialsException("No user with login/email");
+            throw new NotFoundException("No user with login/email");
         }
 
         const valid = await bcrypt.compare(password, user.password);
@@ -72,4 +77,4 @@ class AuthService {
     }
 }
 
-module.exports = new AuthService();
+export default new AuthService();

@@ -1,4 +1,4 @@
-const JwtService = require("../services/JwtService");
+import JwtService from "../services/JwtService.js";
 
 class AuthMiddleware {
      static authenticate(req, res, next) {
@@ -63,4 +63,4 @@ class AuthMiddleware {
     }
 }
 
-module.exports = AuthMiddleware;
+export default AuthMiddleware;

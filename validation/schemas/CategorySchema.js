@@ -1,4 +1,4 @@
-const { z } = require('zod');
+import { z } from 'zod';
 
 const title = z.string()
     .min(1, "Please enter a valid title")
@@ -16,4 +16,4 @@ const schema = {
     }),
 }
 
-module.exports = schema;
+export default schema;

@@ -1,11 +1,12 @@
-const express = require("express");
-const cookies = require("cookie-parser");
-const { createServer } = require("node:http");
-const exception_handler = require("./middleware/ExceptionHandler");
+import express from "express";
+import cookies from "cookie-parser";
+import { createServer } from "node:http";
+import exception_handler from "./middleware/ExceptionHandler.js";
+import { config } from 'dotenv';
 
-require('dotenv').config();
+config();
 
-const router = require("./routers/BaseRouter");
+import router from "./routers/BaseRouter.js";
 
 const app = express();
 const http = createServer(app);

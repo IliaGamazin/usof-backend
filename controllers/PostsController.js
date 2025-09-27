@@ -1,7 +1,7 @@
-const Post = require("../models/Post");
+import Post from "../models/Post.js";
 
-const PostService = require("../services/PostService");
-const CommentService = require("../services/CommentService");
+import PostService from "../services/PostService.js";
+import CommentService from "../services/CommentService.js";
 
 class PostsController {
     async get_posts(req, res, next) {
@@ -254,4 +254,4 @@ class PostsController {
     }
 }
 
-module.exports = new PostsController();
+export default new PostsController();

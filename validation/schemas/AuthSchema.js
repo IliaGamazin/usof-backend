@@ -1,6 +1,6 @@
-const { z } = require('zod');
+import { z } from 'zod';
 
-const { login, password, email, name } = require('./GeneralSchemas');
+import { login, password, email, name } from './GeneralSchemas.js';
 
 const schema = {
     register: z.object({
@@ -22,4 +22,4 @@ const schema = {
     }),
 }
 
-module.exports = schema;
+export default schema;

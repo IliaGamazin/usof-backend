@@ -1,11 +1,11 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
 
-const controller = require("../controllers/CategoriesController");
-const schema = require("../validation/schemas/CategorySchema");
+import controller from "../controllers/CategoriesController.js";
+import schema from "../validation/schemas/CategorySchema.js";
 
-const authenticator = require("../middleware/AuthMiddleware");
-const validator = require("../middleware/ValidationMiddleware");
+import authenticator from "../middleware/AuthMiddleware.js";
+import validator from "../middleware/ValidationMiddleware.js";
 
 router.get("/",
     authenticator.require_auth(),
@@ -38,4 +38,4 @@ router.delete("/:category_id",
     controller.delete_category
 );
 
-module.exports = router;
+export default router;

@@ -1,5 +1,5 @@
-const CategoryService = require("../services/CategoryService");
-const Category = require("../models/Category");
+import CategoryService from "../services/CategoryService.js";
+import Category from "../models/Category.js";
 
 class CategoriesController {
     async get_categories(req, res, next) {
@@ -109,4 +109,4 @@ class CategoriesController {
     }
 }
 
-module.exports = new CategoriesController();
+export default new CategoriesController();

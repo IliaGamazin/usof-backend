@@ -1,11 +1,11 @@
 import Model from "./utils/Model.js";
 
-class Like extends Model {
-    static table_name = "likes";
+class UsersFavourites extends Model {
+    static table_name = "users_favourites";
 
     constructor(attributes = {}) {
         super(attributes);
     }
 }
 
-export default Like;
+export default UsersFavourites;

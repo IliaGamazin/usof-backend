@@ -1,7 +1,8 @@
-const { ZodError } = require('zod');
-const { JsonWebTokenError} = require("jsonwebtoken");
+import { ZodError } from 'zod';
+import pkg from 'jsonwebtoken';
+const { JsonWebTokenError } = pkg;
 
-const AppException = require("../exceptions/AppException");
+import AppException from "../exceptions/AppException.js";
 
 const exception_handler = (error, req, res, next) => {
     console.error(`${req.method} ${req.path} - Error:`, error);
@@ -39,4 +40,4 @@ const exception_handler = (error, req, res, next) => {
     res.status(error.statusCode).json(error.toJSON());
 }
 
-module.exports = exception_handler;
+export default exception_handler;

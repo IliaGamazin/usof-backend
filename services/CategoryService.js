@@ -1,15 +1,15 @@
-const Category = require("../models/Category");
+import Category from "../models/Category.js";
 
-const CredentialsException = require("../exceptions/CredentialsException");
-const ConflictException = require("../exceptions/ConflictException");
-const PostsCategories = require("../models/PostsCategories");
-const Post = require("../models/Post");
+import NotFoundException from "../exceptions/NotFoundException.js";
+import ConflictException from "../exceptions/ConflictException.js";
+import PostsCategories from "../models/PostsCategories.js";
+import Post from "../models/Post.js";
 
 class CategoryService {
     async get_category(id) {
         const category = await Category.find({ id });
         if (!category) {
-            throw new CredentialsException("No category with id");
+            throw new NotFoundException("No category with id");
         }
 
         return {
@@ -22,7 +22,7 @@ class CategoryService {
     async get_category_posts(id, page, limit, order_by, order_dir) {
         const category = await Category.find({ id });
         if (!category) {
-            throw new CredentialsException("No category with id");
+            throw new NotFoundException("No category with id");
         }
 
         return await Post.get_joined_paged({
@@ -71,7 +71,7 @@ class CategoryService {
 
         const category = await Category.find({ id });
         if (!category) {
-            throw new CredentialsException("No category with id");
+            throw new NotFoundException("No category with id");
         }
 
         if (title !== undefined && title !== null) {
@@ -91,7 +91,7 @@ class CategoryService {
     async delete_category(id) {
         const category = await Category.find({ id });
         if (!category) {
-            throw new CredentialsException("No category with id");
+            throw new NotFoundException("No category with id");
         }
 
         await category.delete();
@@ -111,7 +111,7 @@ class CategoryService {
         for (const title of categories) {
             let category = await Category.find({ title });
             if (!category) {
-                throw new CredentialsException("Category does not exists");
+                throw new NotFoundException("Category does not exists");
             }
             res.push(category.id);
         }
@@ -119,4 +119,4 @@ class CategoryService {
     }
 }
 
-module.exports = new CategoryService();
+export default new CategoryService();

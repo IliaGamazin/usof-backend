@@ -1,5 +1,5 @@
-const UserService = require("../services/UserService");
-const User = require("../models/User");
+import UserService from "../services/UserService.js";
+import User from "../models/User.js";
 
 class UsersController {
     async get_users(req, res, next) {
@@ -125,4 +125,4 @@ class UsersController {
     }
 }
 
-module.exports = new UsersController();
+export default new UsersController();

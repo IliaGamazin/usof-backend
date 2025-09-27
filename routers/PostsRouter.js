@@ -1,16 +1,15 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-//const FavouritesRouter = require("./FavouritesRouter");
+import FavouritesRouter from "./FavouritesRouter.js";
+import SubscriptionsRouter from "./SubscriptionsRouter.js";
 
-const upload = require('../middleware/UploadMiddleware');
-const schema = require("../validation/schemas/PostSchema");
+import upload from '../middleware/UploadMiddleware.js';
+import authenticator from "../middleware/AuthMiddleware.js";
 
-const validator = require("../middleware/ValidationMiddleware");
-const authenticator = require("../middleware/AuthMiddleware");
+import controller from "../controllers/PostsController.js";
 
-const controller = require("../controllers/PostsController");
-
-// router.use(FavouritesRouter);
+router.use("/subscribe", SubscriptionsRouter);
+router.use("/favourite", FavouritesRouter);
 
 router.get("/",
     authenticator.require_auth(),
@@ -69,4 +68,4 @@ router.delete("/:post_id/like",
     controller.delete_post_like
 );
 
-module.exports = router;
+export default router;

@@ -1,6 +1,6 @@
-const AuthService = require("../services/AuthService");
-const JwtService = require("../services/JwtService");
-const User = require("../models/User");
+import AuthService from "../services/AuthService.js";
+import JwtService from "../services/JwtService.js";
+import User from "../models/User.js";
 
 class AuthController {
     async register(req, res, next) {
@@ -72,4 +72,4 @@ class AuthController {
     }
 }
 
-module.exports = new AuthController();
+export default new AuthController();

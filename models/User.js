@@ -1,4 +1,4 @@
-const Model = require("./utils/Model");
+import Model from "./utils/Model.js";
 
 class User extends Model {
     static table_name = "users";
@@ -8,4 +8,4 @@ class User extends Model {
     }
 }
 
-module.exports = User;
+export default User;

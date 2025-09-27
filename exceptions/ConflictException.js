@@ -1,4 +1,4 @@
-const AppException = require('./AppException');
+import AppException from './AppException.js';
 
 class ConflictException extends AppException {
     constructor(message) {
@@ -6,4 +6,4 @@ class ConflictException extends AppException {
     }
 }
 
-module.exports = ConflictException;
+export default ConflictException;

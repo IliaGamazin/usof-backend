@@ -1,8 +1,8 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-const CredentialsException = require("../exceptions/CredentialsException");
-const PostImage = require("../models/PostImage");
+import CredentialsException from "../exceptions/CredentialsException.js";
+import PostImage from "../models/PostImage.js";
 
 class FileService {
     constructor(base = "vault") {
@@ -91,4 +91,4 @@ class FileService {
     }
 }
 
-module.exports = new FileService();
+export default new FileService();

@@ -1,4 +1,4 @@
-const Model = require("./utils/Model");
+import Model from "./utils/Model.js";
 
 class Comment extends Model {
     static table_name = "comments";
@@ -8,4 +8,4 @@ class Comment extends Model {
     }
 }
 
-module.exports = Comment;
+export default Comment;

@@ -1,11 +1,11 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
 
-const controller = require("../controllers/AuthController");
-const schema = require("../validation/schemas/AuthSchema");
+import controller from "../controllers/AuthController.js";
+import schema from "../validation/schemas/AuthSchema.js";
 
-const validator = require("../middleware/ValidationMiddleware");
-const authenticator = require("../middleware/AuthMiddleware");
+import validator from "../middleware/ValidationMiddleware.js";
+import authenticator from "../middleware/AuthMiddleware.js";
 
 router.post("/register",
     validator.validate(schema.register),
@@ -23,4 +23,4 @@ router.post("/password-reset", controller.reset_link);
 router.post("/password-reset/:confirm_token", controller.reset_confirm);
 router.post("/refresh", controller.refresh);
 
-module.exports = router;
+export default router;

@@ -1,4 +1,4 @@
-const AppException = require('./AppException');
+import AppException from './AppException.js';
 
 class PermissionException extends AppException {
     constructor(message) {
@@ -6,4 +6,4 @@ class PermissionException extends AppException {
     }
 }
 
-module.exports = PermissionException;
+export default PermissionException;
