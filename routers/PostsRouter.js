@@ -8,7 +8,7 @@ import authenticator from "../middleware/AuthMiddleware.js";
 
 import controller from "../controllers/PostsController.js";
 
-router.use("/subscribe", SubscriptionsRouter);
+router.use("/subscriptions", SubscriptionsRouter);
 router.use("/favourite", FavouritesRouter);
 
 router.get("/",

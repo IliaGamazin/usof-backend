@@ -1,6 +1,7 @@
 import Comment from "../models/Comment.js";
 import User from "../models/User.js";
 import CommentLike from "../models/CommentLike.js";
+import SubscriptionsService from "../services/SubscriptionsService.js";
 
 import NotFoundException from "../exceptions/NotFoundException.js";
 import PermissionException from "../exceptions/PermissionException.js";
@@ -33,6 +34,8 @@ class CommentService {
             created_at: new Date(),
             updated_at: new Date(),
         });
+
+        await SubscriptionsService.notify_users("New comment", post_id);
 
         await comment.save();
         return comment;

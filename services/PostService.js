@@ -12,6 +12,7 @@ import NotFoundException from "../exceptions/NotFoundException.js";
 import FileService from "./FileService.js";
 import CategoryService from "./CategoryService.js";
 import PermissionException from "../exceptions/PermissionException.js";
+import SubscriptionsService from "../services/SubscriptionsService.js";
 
 class PostService {
     async get_post(id) {
@@ -225,6 +226,8 @@ class PostService {
         if (files !== undefined && files !== null && files.length > 0) {
             await FileService.save_post_images(id, files)
         }
+
+        await SubscriptionsService.notify_users("Post updated", post.id);
 
         await post.save();
         const images = await PostImage.get_all({post_id: id});
