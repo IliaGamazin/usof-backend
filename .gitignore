@@ -3,7 +3,7 @@
 
 # Dependencies
 node_modules/
-
+usof/node_modules
 # Vault
 
 vault/

@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "type": "table",
+  "title": "Comments",
+  "hideInSidebar": false,
+  "config": {
+    "dataSource": "mysql_db_1s55t9",
+    "fetchStrategy": "databaseTable",
+    "table": "comments"
+  }
+}
