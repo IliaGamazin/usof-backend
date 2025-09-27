@@ -52,6 +52,37 @@ class AuthService {
         return user;
     }
 
+    async reset_link(email) {
+        const user = await User.find({ email });
+        if (!user) {
+            return { message: "If the email exists, a reset link has been sent" };
+        }
+
+        const reset_token = JwtService.generate_password_reset_token({
+            id: user.id,
+            email: user.email
+        });
+
+        console.log(`Password reset token for ${email}: ${reset_token}`);
+        console.log(`Reset link: http://localhost:3000/password-reset/${reset_token}`);
+
+        return { message: "If the email exists, a reset link has been sent" };
+    }
+
+    async reset_confirm(token, new_password) {
+        const decoded = JwtService.verify_password_reset_token(token);
+
+        const user = await User.find({ id: decoded.id });
+        if (!user) {
+            throw new NotFoundException("User not found");
+        }
+
+        user.password = await bcrypt.hash(new_password, 12);
+        await user.save();
+
+        return { message: "Password reset successfully" };
+    }
+
     send_auth_response(res, user, message, statusCode = 200) {
         const payload = {
             id: user.id,

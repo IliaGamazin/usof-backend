@@ -58,17 +58,36 @@ class AuthController {
 
     async logout(req, res) {
         delete res.cookie('refresh_token', null);
-        res.status(200).json({
+        return res.status(200).json({
             message: 'Logged out successfully'
         });
     }
 
-    async reset_link(req, res) {
-        console.log(req.body);
+    async reset_link(req, res, next) {
+        try {
+            const result = await AuthService.reset_link(
+                req.body.email
+            );
+
+            return res.status(200).json(result);
+        }
+        catch (error) {
+            next(error);
+        }
     }
 
-    async reset_confirm(req, res) {
-        console.log(req.body);
+    async reset_confirm(req, res, next) {
+        try {
+            const result = await AuthService.reset_confirm(
+                req.params.confirm_token,
+                req.body.password
+            );
+
+            return res.status(200).json(result);
+        }
+        catch (error) {
+            next(error);
+        }
     }
 }
 

@@ -40,6 +40,21 @@ class JwtService {
             refresh_token: this.generate_refresh_token(refresh_payload),
         }
     }
+
+    static generate_password_reset_token(payload) {
+        return jwt.sign(payload, process.env.PASSWORD_RESET_SECRET || process.env.ACCESS_TOKEN_SECRET, {
+            expiresIn: '1h'
+        });
+    }
+
+    static verify_password_reset_token(token) {
+        try {
+            return jwt.verify(token, process.env.PASSWORD_RESET_SECRET || process.env.ACCESS_TOKEN_SECRET);
+        }
+        catch (error) {
+            throw error;
+        }
+    }
 }
 
 export default JwtService;
