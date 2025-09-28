@@ -211,7 +211,7 @@ class PostsController {
 
             const result = await PostService.update_post(
                 req.params.post_id,
-                req.user.id,
+                req.user,
                 req.body.title,
                 req.body.content,
                 categories_arr,

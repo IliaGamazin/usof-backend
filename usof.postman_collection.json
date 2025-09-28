@@ -1,0 +1,1573 @@
+{
+	"info": {
+		"_postman_id": "c9a5b80b-64bf-49ce-8d55-0ef525075b28",
+		"name": "usof",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "48219262",
+		"_collection_link": "https://iliagamazin-8924103.postman.co/workspace/%25D0%2598%25D0%25BB%25D1%258C%25D1%258F-%25D0%2593%25D0%25B0%25D0%25BC%25D0%25B0%25D0%25B7%25D0%25B8%25D0%25BD's-Workspace~4649d141-04ba-4845-8af2-e39a6ba7c5ef/collection/48219262-c9a5b80b-64bf-49ce-8d55-0ef525075b28?action=share&source=collection_link&creator=48219262"
+	},
+	"item": [
+		{
+			"name": "Auth +",
+			"item": [
+				{
+					"name": "Register +",
+					"item": [
+						{
+							"name": "Register Valid",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"login\": \"testuser\",\r\n  \"firstname\": \"Test\",\r\n  \"lastname\": \"User\",\r\n  \"email\": \"testuser@example.com\",\r\n  \"password\": \"password123\",\r\n  \"password_confirmation\": \"password123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/auth/register"
+							},
+							"response": []
+						},
+						{
+							"name": "Register Invalid Body",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"login\": \"testuser2\",\r\n  \"email\": \"testuser2@example.com\",\r\n  \"password\": \"password123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/auth/register"
+							},
+							"response": []
+						},
+						{
+							"name": "Register Invalid Password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"login\": \"testuser3\",\r\n  \"firstname\": \"Test\",\r\n  \"lastname\": \"User\",\r\n  \"email\": \"testuser3@example.com\",\r\n  \"password\": \"password123\",\r\n  \"password_confirmation\": \"differentpassword\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/auth/register"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Login +",
+					"item": [
+						{
+							"name": "Login Valid",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"login\": \"johndoe\",\r\n    \"email\": \"john.doe@email.com\",\r\n    \"password\": \"password1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/auth/login"
+							},
+							"response": []
+						},
+						{
+							"name": "Login Admin",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"login\": \"admin\",\r\n    \"email\": \"admin@usof.com\",\r\n    \"password\": \"adminadmin\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/auth/login"
+							},
+							"response": []
+						},
+						{
+							"name": "Login Invalid Body",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"login\": \"johndoe\",\r\n    \"email\": \"john.doe@email.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/auth/login"
+							},
+							"response": []
+						},
+						{
+							"name": "Login Invalid Password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"login\": \"johndoe\",\r\n    \"email\": \"john.doe@email.com\",\r\n    \"password\": \"wrongpassword\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/auth/login"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Reset",
+					"item": [
+						{
+							"name": "Reset link",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"john.doe@email.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/auth/password-reset"
+							},
+							"response": []
+						},
+						{
+							"name": "Reset password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"password\": \"IlkaIlka2\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/auth/password-reset/:confirm_token",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"auth",
+										"password-reset",
+										":confirm_token"
+									],
+									"variable": [
+										{
+											"key": "confirm_token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiZW1haWwiOiJJbGthQElsa2EuSWxrYSIsImlhdCI6MTc1ODk4ODg1MCwiZXhwIjoxNzU4OTkyNDUwfQ.gs4kHYj67irjC01zdT436Te-pyCLjXQ2_6C-RJ4nOfc"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Logout +",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9naW4iOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AYWRtaW4uYWRtaW4iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTg5ODA3ODUsImV4cCI6MTc1ODk4MTY4NX0.A3GcPTG_SYTDytG8k9OeN_I7cApnoHFyFCOyHq6kUXY"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"url": "http://localhost:8080/api/auth/logout"
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh +",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "refresh_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzU4OTgwODA0LCJleHAiOjE3NTkwNjcyMDR9.P2hwmbERe-x2L8N0wck0ciAVMCGvRLLBaDyNVBkwg88"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"url": "http://localhost:8080/api/auth/refresh"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users +",
+			"item": [
+				{
+					"name": "All +",
+					"item": [
+						{
+							"name": "All Users No Limit",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwibG9naW4iOiJJbGthIiwiZW1haWwiOiJJbGthQElsa2EuSWxrYSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4OTgwODYzLCJleHAiOjE3NTg5ODE3NjN9.SfHuZMglXvVWw2dA_ZdgqXhhprXNtAtIAZFoLXkVz2o"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/api/users"
+							},
+							"response": []
+						},
+						{
+							"name": "All Users Limited",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwibG9naW4iOiJJbGthIiwiZW1haWwiOiJJbGthQElsa2EuSWxrYSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4OTgwODYzLCJleHAiOjE3NTg5ODE3NjN9.SfHuZMglXvVWw2dA_ZdgqXhhprXNtAtIAZFoLXkVz2o"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/users?page=1&limit=3&order_by=login&order_dir=ASC",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"users"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "3"
+										},
+										{
+											"key": "order_by",
+											"value": "login"
+										},
+										{
+											"key": "order_dir",
+											"value": "ASC"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "All Users By Rating",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9naW4iOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AdXNvZi5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTg5OTI1MjEsImV4cCI6MTc1ODk5MzQyMX0.cUnHfhPQVtUFBpAYsXucgJUGWVM5x_4dKzmeCA_jFqE"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/users?order_by=rating&order_dir=desc",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"users"
+									],
+									"query": [
+										{
+											"key": "order_by",
+											"value": "rating"
+										},
+										{
+											"key": "order_dir",
+											"value": "desc"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "New +",
+					"item": [
+						{
+							"name": "New User Valid",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9naW4iOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AdXNvZi5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTg5OTI1MjEsImV4cCI6MTc1ODk5MzQyMX0.cUnHfhPQVtUFBpAYsXucgJUGWVM5x_4dKzmeCA_jFqE"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"login\": \"NewUser2\",\r\n    \"firstname\": \"Совочек\",\r\n    \"lastname\": \"Свиночек\",\r\n    \"password\": \"NewUserNewUser22\",\r\n    \"password_confirmation\": \"NewUserNewUser22\",\r\n    \"email\": \"NewUser@NewUser2.NewUser\",\r\n    \"role\": \"ADMIN\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/users"
+							},
+							"response": []
+						},
+						{
+							"name": "New User Invalid Password",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9naW4iOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AYWRtaW4uYWRtaW4iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTg5NzcxMTQsImV4cCI6MTc1ODk3ODAxNH0.Uhjm1yxNEuoNlCROy8haQYbwnKasMEhAYlHcqoWlgaQ"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"login\": \"sovok\",\r\n    \"firstname\": \"Совочек\",\r\n    \"lastname\": \"Свиночек\",\r\n    \"password\": \"SovaUsrSovaUser2\",\r\n    \"password_confirmation\": \"SovUserSova2User2\",\r\n    \"email\": \"SovaUser@SovaUser.SovaUser\",\r\n    \"role\": \"ADMIN\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/users"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Update +",
+					"item": [
+						{
+							"name": "Update User",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9naW4iOiJJbGthIiwiZW1haWwiOiJJbGthQElsa2EuSWxrYSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU3NjEzMjE5LCJleHAiOjE3NTc2MTQxMTl9.F9R5duNiRxdIEh9HkRjszX7mVTTmukf7tFAgQ5ZaCjI"
+									}
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"login\": \"Ilka23\",\r\n    \"password\": \"IlkaIlka22\",\r\n    \"email\": \"Ilka2@Ilka.Ilka\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/users/:user_id",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"users",
+										":user_id"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwibG9naW4iOiJJbGthIiwiZW1haWwiOiJJbGthQElsa2EuSWxrYSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4Mzc0MDA4LCJleHAiOjE3NTgzNzQ5MDh9.XCox3O2GONe-CdNQ9ytgtNzsdWMJkYx2mBKPe7361Fs"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/users/:user_id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								":user_id"
+							],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set avatar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwibG9naW4iOiJJbGthIiwiZW1haWwiOiJJbGthQElsa2EuSWxrYSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4OTgwODg4LCJleHAiOjE3NTg5ODE3ODh9.W6D9ISFvbc3D_Hws-FqQDShzEruXvEgZPHQFyWmdC-A"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "/C:/Users/gamaz/Desktop/FELV-cat.jpg"
+								}
+							]
+						},
+						"url": "http://localhost:8080/api/users/avatar"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9naW4iOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AYWRtaW4uYWRtaW4iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTgzNzQ1MTMsImV4cCI6MTc1ODM3NTQxM30.0eOEKecPQjyle0kJIzHPoGgDL5tLJLF6pjAD9VMgMCA"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/users/:user_id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								":user_id"
+							],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categories +",
+			"item": [
+				{
+					"name": "All Categories",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwibG9naW4iOiJJbGthIiwiZW1haWwiOiJJbGthQElsa2EuSWxrYSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4Mzc0MzYyLCJleHAiOjE3NTgzNzUyNjJ9._UJhwORpjLeTZKBAiBv9Ah3wdVk37FQ32mDdu1oiOVA"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/categories?page=1&limit=3&order_by=title&order_dir=ASC",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"categories"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "3"
+								},
+								{
+									"key": "order_by",
+									"value": "title"
+								},
+								{
+									"key": "order_dir",
+									"value": "ASC"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwibG9naW4iOiJJbGthIiwiZW1haWwiOiJJbGthQElsa2EuSWxrYSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4Mzc0MzYyLCJleHAiOjE3NTgzNzUyNjJ9._UJhwORpjLeTZKBAiBv9Ah3wdVk37FQ32mDdu1oiOVA"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/categories/:category_id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"categories",
+								":category_id"
+							],
+							"variable": [
+								{
+									"key": "category_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Category Posts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwibG9naW4iOiJJbGthIiwiZW1haWwiOiJJbGthQElsa2EuSWxrYSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4Mzc1NDQ3LCJleHAiOjE3NTgzNzYzNDd9.xevvSUZYPRZHrj49LcpHnDo5_6VsAOp-d7OeNQAesKA"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/categories/:category_id/posts?order_by=\"id\"&order_dir=DESC",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"categories",
+								":category_id",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "order_by",
+									"value": "\"id\""
+								},
+								{
+									"key": "order_dir",
+									"value": "DESC"
+								}
+							],
+							"variable": [
+								{
+									"key": "category_id",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwibG9naW4iOiJJbGthIiwiZW1haWwiOiJJbGthQElsa2EuSWxrYSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4Mzc0MzYyLCJleHAiOjE3NTgzNzUyNjJ9._UJhwORpjLeTZKBAiBv9Ah3wdVk37FQ32mDdu1oiOVA"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Geese farming\",\r\n    \"description\": \"Wow\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/categories"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9naW4iOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AYWRtaW4uYWRtaW4iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTgyMTg5NzcsImV4cCI6MTc1ODIxOTg3N30.5HWcTrA5GvSuv9GYGsTSQSg-O7pTovhzPeEK8-FHlyU"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/categories/:category_id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"categories",
+								":category_id"
+							],
+							"variable": [
+								{
+									"key": "category_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9naW4iOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AYWRtaW4uYWRtaW4iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTgyMDk5NDksImV4cCI6MTc1ODIxMDg0OX0.O5s9LcO2iifWrEXSYf9NnGZ9mBPH-dBlYKfT6h0zDIU"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/categories/:category_id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"categories",
+								":category_id"
+							],
+							"variable": [
+								{
+									"key": "category_id",
+									"value": "7"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Posts +",
+			"item": [
+				{
+					"name": "All +",
+					"item": [
+						{
+							"name": "All Posts No Limit",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9naW4iOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AYWRtaW4uYWRtaW4iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTg5NzcxMTQsImV4cCI6MTc1ODk3ODAxNH0.Uhjm1yxNEuoNlCROy8haQYbwnKasMEhAYlHcqoWlgaQ"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/api/posts"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get",
+					"item": [
+						{
+							"name": "Get Post",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9naW4iOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AYWRtaW4uYWRtaW4iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTgzODM3NzQsImV4cCI6MTc1ODM4NDY3NH0.fnrKG8OHgffKXSiznQlfE-34HozQLiyPkdMNEc4pqoE"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/posts/:post_id",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"posts",
+										":post_id"
+									],
+									"variable": [
+										{
+											"key": "post_id",
+											"value": "33"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "New",
+					"item": [
+						{
+							"name": "New Post Valid",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9naW4iOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AYWRtaW4uYWRtaW4iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTgzNzg1MzYsImV4cCI6MTc1ODM3OTQzNn0.WEjJDGsuOWJE5CBcs0KUh_Ol9L6Z0_y4GdQlUeqdHaQ"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "post rofa test",
+											"type": "text"
+										},
+										{
+											"key": "content",
+											"value": "about 33333",
+											"type": "text"
+										},
+										{
+											"key": "images",
+											"type": "file",
+											"src": "/C:/Users/gamaz/Desktop/FELV-cat.jpg"
+										},
+										{
+											"key": "images",
+											"type": "file",
+											"src": "/C:/Users/gamaz/Desktop/FELV-cat.jpg"
+										},
+										{
+											"key": "categories",
+											"value": "V++",
+											"type": "text"
+										},
+										{
+											"key": "categories",
+											"value": "C#3",
+											"type": "text"
+										},
+										{
+											"key": "images",
+											"type": "file",
+											"src": "/C:/Users/gamaz/Desktop/FELV-cat.jpg"
+										}
+									]
+								},
+								"url": "http://localhost:8080/api/posts"
+							},
+							"response": []
+						},
+						{
+							"name": "New Post Invalid",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Likes",
+					"item": [
+						{
+							"name": "New Like",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwibG9naW4iOiJJbGthIiwiZW1haWwiOiJJbGthQElsa2EuSWxrYSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4Mzc1NjYwLCJleHAiOjE3NTgzNzY1NjB9.jqsGKA4RhuKggQVplfzH8ap_QnnsFuTnjaCf4iynpyE"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/posts/:post_id/like?type=DISLIKE",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"posts",
+										":post_id",
+										"like"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "DISLIKE"
+										}
+									],
+									"variable": [
+										{
+											"key": "post_id",
+											"value": "36"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New Dislike",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "Get Post Likes",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9naW4iOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AYWRtaW4uYWRtaW4iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTgzNzk4MjgsImV4cCI6MTc1ODM4MDcyOH0.SESn2jz86zxMELANcNNDXXTsyvTWMCOgsdxrXJPMukw"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/posts/:post_id/like",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"posts",
+										":post_id",
+										"like"
+									],
+									"variable": [
+										{
+											"key": "post_id",
+											"value": "36"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Like",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9naW4iOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AYWRtaW4uYWRtaW4iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTgzNzExOTAsImV4cCI6MTc1ODM3MjA5MH0.X4ihxUWLqK6M2Wf_ce9eF6AAxxX2v_FiN5gwAxX_PLc"
+									}
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/posts/:post_id/like",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"posts",
+										":post_id",
+										"like"
+									],
+									"variable": [
+										{
+											"key": "post_id",
+											"value": "29"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Comments",
+					"item": [
+						{
+							"name": "New Comment Valid",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9naW4iOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AYWRtaW4uYWRtaW4iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTg5ODY0NzEsImV4cCI6MTc1ODk4NzM3MX0.FxBXuXPY-RJIVmzJ4bzQjYVWGPuixYqBXI_NzJqLNgk"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"content\":\"wow, i really hate, and, and from ilka222222\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/posts/:post_id/comments",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"posts",
+										":post_id",
+										"comments"
+									],
+									"variable": [
+										{
+											"key": "post_id",
+											"value": "35"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New Comment Invalid",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "Get Post Comments",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwibG9naW4iOiJJbGthIiwiZW1haWwiOiJJbGthQElsa2EuSWxrYSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4Mzg0MzAzLCJleHAiOjE3NTgzODUyMDN9.RgkYz5noLTrfIjhY1pH9HQdxexickf5OblmNXlaz7so"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/posts/:post_id/comments",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"posts",
+										":post_id",
+										"comments"
+									],
+									"variable": [
+										{
+											"key": "post_id",
+											"value": "34"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Favourite +",
+					"item": [
+						{
+							"name": "Add favourite",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwibG9naW4iOiJJbGthIiwiZW1haWwiOiJJbGthQElsa2EuSWxrYSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4OTgyMDUyLCJleHAiOjE3NTg5ODI5NTJ9.tLc-rvEInxDnmuliuozEkaFM8l__4TS8HxsLHXFl2Y4"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/posts/favourite/:post_id",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"posts",
+										"favourite",
+										":post_id"
+									],
+									"variable": [
+										{
+											"key": "post_id",
+											"value": "29"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete favourite",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwibG9naW4iOiJJbGthIiwiZW1haWwiOiJJbGthQElsa2EuSWxrYSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4OTg0NDQwLCJleHAiOjE3NTg5ODUzNDB9.nAf2QfEq3BvjR23CaBB9iAJWmnN4KrnDbWbsmSHhu1k"
+									}
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/posts/favourite/:post_id",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"posts",
+										"favourite",
+										":post_id"
+									],
+									"variable": [
+										{
+											"key": "post_id",
+											"value": "29"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Subcribtions",
+					"item": [
+						{
+							"name": "Get subscriprions",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9naW4iOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AYWRtaW4uYWRtaW4iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTg5ODcxNjMsImV4cCI6MTc1ODk4ODA2M30.kXwfYZ2CfBDP9NATpWPQJZ-kPBMgPODyEVCoGXPoEeY"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/api/posts/subscriptions"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get Post Categories",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwibG9naW4iOiJJbGthIiwiZW1haWwiOiJJbGthQElsa2EuSWxrYSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4Mzc1NDQ3LCJleHAiOjE3NTgzNzYzNDd9.xevvSUZYPRZHrj49LcpHnDo5_6VsAOp-d7OeNQAesKA"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/posts/:post_id/categories",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"posts",
+								":post_id",
+								"categories"
+							],
+							"variable": [
+								{
+									"key": "post_id",
+									"value": "36"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9naW4iOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AYWRtaW4uYWRtaW4iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTg5ODY3OTQsImV4cCI6MTc1ODk4NzY5NH0.G7nsi0vmQ_CQY6wauzqWkRYzL1wwOL-qy3-C3HsICCw"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "mynameilka2",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "removed2",
+									"type": "text"
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"src": "/C:/Users/gamaz/Desktop/men_at_work.jpg"
+								},
+								{
+									"key": "categories",
+									"value": "C#",
+									"type": "text"
+								},
+								{
+									"key": "files_to_delete",
+									"value": "26",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "ACTIVE",
+									"type": "text"
+								},
+								{
+									"key": "files_to_delete",
+									"value": "15",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/posts/:post_id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"posts",
+								":post_id"
+							],
+							"variable": [
+								{
+									"key": "post_id",
+									"value": "35"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9naW4iOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AYWRtaW4uYWRtaW4iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTgyODYyMDIsImV4cCI6MTc1ODI4NzEwMn0.NsbS6s5W5R28VmUMzQ8Z61WCWPxZoQroSd4wsEelKQw"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/posts/:post_id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"posts",
+								":post_id"
+							],
+							"variable": [
+								{
+									"key": "post_id",
+									"value": "27"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comments +",
+			"item": [
+				{
+					"name": "Likes",
+					"item": [
+						{
+							"name": "New Comment Like",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwibG9naW4iOiJJbGthIiwiZW1haWwiOiJJbGthQElsa2EuSWxrYSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4Mzg0MzAzLCJleHAiOjE3NTgzODUyMDN9.RgkYz5noLTrfIjhY1pH9HQdxexickf5OblmNXlaz7so"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/comments/:comment_id/like?type=DISLIKE",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"comments",
+										":comment_id",
+										"like"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "DISLIKE"
+										}
+									],
+									"variable": [
+										{
+											"key": "comment_id",
+											"value": "7"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Comment Like",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwibG9naW4iOiJJbGthIiwiZW1haWwiOiJJbGthQElsa2EuSWxrYSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4MzgzMjg3LCJleHAiOjE3NTgzODQxODd9.xyVTXYX5mZl_6VjUM_xx6j-dOI-iUfJKfQPC5dOz3aI"
+									}
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/comments/:comment_id/like",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"comments",
+										":comment_id",
+										"like"
+									],
+									"variable": [
+										{
+											"key": "comment_id",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Comment Likes",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwibG9naW4iOiJJbGthIiwiZW1haWwiOiJJbGthQElsa2EuSWxrYSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU4Mzg2MDQwLCJleHAiOjE3NTgzODY5NDB9.zb8bi0kr01znmwDLYZA54VmtIv_YC2YAY2llUbaibZ4"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/comments/:comment_id/like",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"comments",
+										":comment_id",
+										"like"
+									],
+									"variable": [
+										{
+											"key": "comment_id",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get Comment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9naW4iOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AYWRtaW4uYWRtaW4iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTgzODM0OTIsImV4cCI6MTc1ODM4NDM5Mn0.9JdpqdQ3bqNAAjrEK-XQ2duK5bwORF7gjohUsJQqEGo"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/comments/:comment_id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comments",
+								":comment_id"
+							],
+							"variable": [
+								{
+									"key": "comment_id",
+									"value": "9"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Comment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwibG9naW4iOiJJbGthMiIsImVtYWlsIjoiSWxrYUBJbGthLklsa2EiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1ODM2NjU3MSwiZXhwIjoxNzU4MzY3NDcxfQ.HOd-Ffxop7OskBJMjCdxGeG7rBVMF-7a3BNPw1_Ndhk"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/comments/:comment_id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comments",
+								":comment_id"
+							],
+							"variable": [
+								{
+									"key": "comment_id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Comment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwibG9naW4iOiJJbGthMiIsImVtYWlsIjoiSWxrYUBJbGthLklsa2EiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1ODM2NjU3MSwiZXhwIjoxNzU4MzY3NDcxfQ.HOd-Ffxop7OskBJMjCdxGeG7rBVMF-7a3BNPw1_Ndhk"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": \"edited by ilka admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/comments/:comment_id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comments",
+								":comment_id"
+							],
+							"variable": [
+								{
+									"key": "comment_id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

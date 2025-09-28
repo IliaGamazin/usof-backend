@@ -183,13 +183,13 @@ class PostService {
         await author.save();
     }
 
-    async update_post(id, author_id, title, content, categories, files_to_delete, files, status) {
+    async update_post(id, author, title, content, categories, files_to_delete, files, status) {
         let post = await Post.find({ id });
         if (!post) {
             throw new NotFoundException("No post with id");
         }
 
-        if (post.author_id !== author_id ) {
+        if (post.author_id !== author.id && author.role !== "ADMIN") {
             throw new PermissionException("Permission denied");
         }
 
@@ -211,13 +211,14 @@ class PostService {
             await pc.delete();
         }
 
+
         const categories_ids = await CategoryService.parse_categories(categories)
         await CategoryService.save_categories(id, categories_ids);
 
         if (files_to_delete && files_to_delete.length > 0) {
             for (const file_id of files_to_delete) {
                 const image = await PostImage.find({ id: file_id });
-                if (image && image.post_id === post.id) {
+                if (image) {
                     await image.delete();
                 }
             }
