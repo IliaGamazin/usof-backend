@@ -65,11 +65,12 @@ http://localhost:5480/
 
 ## Examples of API responses:
 
-
+<img width="938" height="987" alt="image" src="https://github.com/user-attachments/assets/93e9b6b0-d4c2-48bd-95f9-480db51cff94" />
+<img width="931" height="1221" alt="image" src="https://github.com/user-attachments/assets/6f1c5238-5b8a-4644-bb79-31ae751ce2e9" />
 
 ## Admin panel behaviour:
 
-
+<img width="1615" height="827" alt="image" src="https://github.com/user-attachments/assets/6bd62abe-5c81-4b53-b19b-f02b5c3d0864" />
 
 ## Testing
 
