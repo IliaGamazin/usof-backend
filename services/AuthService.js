@@ -94,10 +94,10 @@ class AuthService {
         const tokens = JwtService.generate_token_pair(payload);
 
         res.cookie('refresh_token', tokens.refresh_token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
-            maxAge: 24 * 60 * 60 * 1000
+            secure: false,
+            same_site: 'none',
+            maxAge: 24 * 60 * 60 * 1000,
+            domain: 'localhost'
         });
 
         return res.status(statusCode).json({

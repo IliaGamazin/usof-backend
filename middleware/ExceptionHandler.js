@@ -6,16 +6,11 @@ import AppException from "../exceptions/AppException.js";
 
 const exception_handler = (error, req, res, next) => {
     console.error(`${req.method} ${req.path} - Error:`, error);
-
     if (error instanceof ZodError) {
         return res.status(400).json({
             success: false,
             message: "Validation failed.",
-            issues: error.issues.map(err => ({
-                field: err.path.join("."),
-                message: err.message,
-                code: err.code
-            }))
+            error: error.issues[0]
         });
     }
 
