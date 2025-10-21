@@ -7,19 +7,60 @@
 -- user4: password4 -> $2b$12$XOhecBJ2K.N72GsO9Wg9BOEiLTkODSPbH5Vgn3mXPo7eKrGtIVJky
 USE usof;
 -- Insert Users (1 admin + 4 regular users)
+
 INSERT INTO users (login, firstname, lastname, password, email, role) VALUES
-('admin', 'Admin', 'User', '$2b$12$uvwmGWqlBzvylIHnxllkZuGcVQqouwVyb.O24QKvg.xl5e8hZYC/O', 'admin@usof.com', 'ADMIN'),
-('johndoe', 'John', 'Doe', '$2b$12$OVHKZVKzlNmNEjrsonR7X.QNYEpSWk1ddtSQbH80qpub7wTAsKyGm', 'john.doe@email.com', 'USER'),
-('jansmith', 'Jane', 'Smith', '$2b$12$EQhyUyDDnNVAS0XrmytZ0OWPnpDxhzAXQG2PIqkFP8IgfJeGkOihi', 'jane.smith@email.com', 'USER'),
-('mikejohnson', 'Mike', 'Johnson', '$2b$12$Vz3k6GotYEgXObpQ2aqncuRHG7eK.V9lLTlC9otSNWRlpfTNGGzta', 'mike.johnson@email.com', 'USER'),
-('sarahwilson', 'Sarah', 'Wilson', '$2b$12$XOhecBJ2K.N72GsO9Wg9BOEiLTkODSPbH5Vgn3mXPo7eKrGtIVJky', 'sarah.wilson@email.com', 'USER');
+  ('admin', 'Admin', 'User', '$2b$12$uvwmGWqlBzvylIHnxllkZuGcVQqouwVyb.O24QKvg.xl5e8hZYC/O', 'admin@usof.com', 'ADMIN'),
+  ('johndoe', 'John', 'Doe', '$2b$12$OVHKZVKzlNmNEjrsonR7X.QNYEpSWk1ddtSQbH80qpub7wTAsKyGm', 'john.doe@email.com', 'USER'),
+  ('jansmith', 'Jane', 'Smith', '$2b$12$EQhyUyDDnNVAS0XrmytZ0OWPnpDxhzAXQG2PIqkFP8IgfJeGkOihi', 'jane.smith@email.com', 'USER'),
+  ('mikejohnson', 'Mike', 'Johnson', '$2b$12$Vz3k6GotYEgXObpQ2aqncuRHG7eK.V9lLTlC9otSNWRlpfTNGGzta', 'mike.johnson@email.com', 'USER'),
+  ('sarahwilson', 'Sarah', 'Wilson', '$2b$12$XOhecBJ2K.N72GsO9Wg9BOEiLTkODSPbH5Vgn3mXPo7eKrGtIVJky', 'sarah.wilson@email.com', 'USER'),
+  ('alexchen', 'Alex', 'Chen', '$2b$12$8K4yYz9Hx6qL3mP2nQ5rS.TuV7wX8yZ9aB1cD2eF3gH4iJ5kL6mN7o', 'alex.chen@email.com', 'USER'),
+  ('emilybrown', 'Emily', 'Brown', '$2b$12$8K4yYz9Hx6qL3mP2nQ5rS.TuV7wX8yZ9aB1cD2eF3gH4iJ5kL6mN7o', 'emily.brown@email.com', 'USER'),
+  ('davidlee', 'David', 'Lee', '$2b$12$8K4yYz9Hx6qL3mP2nQ5rS.TuV7wX8yZ9aB1cD2eF3gH4iJ5kL6mN7o', 'david.lee@email.com', 'USER'),
+  ('lisamartinez', 'Lisa', 'Martinez', '$2b$12$8K4yYz9Hx6qL3mP2nQ5rS.TuV7wX8yZ9aB1cD2eF3gH4iJ5kL6mN7o', 'lisa.martinez@email.com', 'USER'),
+  ('robertgarcia', 'Robert', 'Garcia', '$2b$12$8K4yYz9Hx6qL3mP2nQ5rS.TuV7wX8yZ9aB1cD2eF3gH4iJ5kL6mN7o', 'robert.garcia@email.com', 'USER'),
+  ('mariaanderson', 'Maria', 'Anderson', '$2b$12$8K4yYz9Hx6qL3mP2nQ5rS.TuV7wX8yZ9aB1cD2eF3gH4iJ5kL6mN7o', 'maria.anderson@email.com', 'USER'),
+  ('jameswhite', 'James', 'White', '$2b$12$8K4yYz9Hx6qL3mP2nQ5rS.TuV7wX8yZ9aB1cD2eF3gH4iJ5kL6mN7o', 'james.white@email.com', 'USER'),
+  ('laurathompson', 'Laura', 'Thompson', '$2b$12$8K4yYz9Hx6qL3mP2nQ5rS.TuV7wX8yZ9aB1cD2eF3gH4iJ5kL6mN7o', 'laura.thompson@email.com', 'USER'),
+  ('kevinharris', 'Kevin', 'Harris', '$2b$12$8K4yYz9Hx6qL3mP2nQ5rS.TuV7wX8yZ9aB1cD2eF3gH4iJ5kL6mN7o', 'kevin.harris@email.com', 'USER'),
+  ('nancyclark', 'Nancy', 'Clark', '$2b$12$8K4yYz9Hx6qL3mP2nQ5rS.TuV7wX8yZ9aB1cD2eF3gH4iJ5kL6mN7o', 'nancy.clark@email.com', 'USER'),
+  ('danielroberts', 'Daniel', 'Roberts', '$2b$12$8K4yYz9Hx6qL3mP2nQ5rS.TuV7wX8yZ9aB1cD2eF3gH4iJ5kL6mN7o', 'daniel.roberts@email.com', 'USER'),
+  ('jennykim', 'Jenny', 'Kim', '$2b$12$8K4yYz9Hx6qL3mP2nQ5rS.TuV7wX8yZ9aB1cD2eF3gH4iJ5kL6mN7o', 'jenny.kim@email.com', 'USER'),
+  ('tommoore', 'Tom', 'Moore', '$2b$12$8K4yYz9Hx6qL3mP2nQ5rS.TuV7wX8yZ9aB1cD2eF3gH4iJ5kL6mN7o', 'tom.moore@email.com', 'USER'),
+  ('annataylor', 'Anna', 'Taylor', '$2b$12$8K4yYz9Hx6qL3mP2nQ5rS.TuV7wX8yZ9aB1cD2eF3gH4iJ5kL6mN7o', 'anna.taylor@email.com', 'USER'),
+  ('chrismiller', 'Chris', 'Miller', '$2b$12$8K4yYz9Hx6qL3mP2nQ5rS.TuV7wX8yZ9aB1cD2eF3gH4iJ5kL6mN7o', 'chris.miller@email.com', 'USER'),
+  ('rachelgreen', 'Rachel', 'Green', '$2b$12$8K4yYz9Hx6qL3mP2nQ5rS.TuV7wX8yZ9aB1cD2eF3gH4iJ5kL6mN7o', 'rachel.green@email.com', 'USER'),
+  ('peterparker', 'Peter', 'Parker', '$2b$12$8K4yYz9Hx6qL3mP2nQ5rS.TuV7wX8yZ9aB1cD2eF3gH4iJ5kL6mN7o', 'peter.parker@email.com', 'USER'),
+  ('sophiaturner', 'Sophia', 'Turner', '$2b$12$8K4yYz9Hx6qL3mP2nQ5rS.TuV7wX8yZ9aB1cD2eF3gH4iJ5kL6mN7o', 'sophia.turner@email.com', 'USER'),
+  ('markwright', 'Mark', 'Wright', '$2b$12$8K4yYz9Hx6qL3mP2nQ5rS.TuV7wX8yZ9aB1cD2eF3gH4iJ5kL6mN7o', 'mark.wright@email.com', 'USER'),
+  ('oliviahill', 'Olivia', 'Hill', '$2b$12$8K4yYz9Hx6qL3mP2nQ5rS.TuV7wX8yZ9aB1cD2eF3gH4iJ5kL6mN7o', 'olivia.hill@email.com', 'USER');
 
 -- Insert Categories
 INSERT INTO categories (title, description) VALUES
 ('Technology', 'Discussions about the latest in technology, gadgets, and software development'),
 ('Science', 'Scientific discoveries, research, and educational content'),
 ('Lifestyle', 'Health, fitness, travel, and general life advice'),
-('Entertainment', 'Movies, music, games, books, and other entertainment topics');
+('Entertainment', 'Movies, music, games, books, and other entertainment topics'),
+('Business', 'Entrepreneurship, finance, marketing, and career development'),
+('Education', 'Learning resources, academic discussions, and educational techniques'),
+('Arts & Culture', 'Visual arts, literature, theater, and cultural discussions'),
+('Sports', 'Athletic competitions, teams, players, and sports analysis'),
+('Food & Cooking', 'Recipes, cooking techniques, restaurant reviews, and culinary arts'),
+('Health & Wellness', 'Medical advice, mental health, nutrition, and wellness practices'),
+('Travel', 'Destination guides, travel tips, and adventure stories'),
+('Politics', 'Government policies, political discussions, and current affairs'),
+('Environment', 'Climate change, conservation, sustainability, and ecological issues'),
+('Fashion', 'Clothing trends, style advice, and fashion industry news'),
+('Photography', 'Camera techniques, photo editing, and photography inspiration'),
+('Gaming', 'Video games, esports, gaming hardware, and game development'),
+('DIY & Crafts', 'Do-it-yourself projects, handmade crafts, and creative tutorials'),
+('Relationships', 'Dating, marriage, family, and interpersonal relationship advice'),
+('History', 'Historical events, figures, and archaeological discoveries'),
+('Pets & Animals', 'Pet care, animal welfare, and wildlife conservation'),
+('Automotive', 'Cars, motorcycles, vehicle maintenance, and automotive news'),
+('Parenting', 'Child development, parenting tips, and family activities'),
+('Home & Garden', 'Home improvement, interior design, and gardening tips'),
+('Philosophy', 'Ethical discussions, philosophical theories, and thought experiments');
 
 -- Insert Posts (1-3 posts per user, some with multiple categories)
 INSERT INTO posts (author_id, title, content, status) VALUES

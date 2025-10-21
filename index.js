@@ -17,6 +17,7 @@ const corsOptions = {
     origin: true,
     credentials: true
 };
+app.use('/vault', express.static('vault'));
 
 app.use(cors(corsOptions));
 app.use(cookies());

@@ -5,6 +5,8 @@ class AuthMiddleware {
         try {
             const authHeader = req.headers.authorization;
 
+            console.log(authHeader);
+
             if (!authHeader) {
                 return res.status(401).json({
                     error: 'Access token is required'

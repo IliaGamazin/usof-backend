@@ -21,7 +21,8 @@ class UserService {
             lastname: user.lastname,
             pfp: user.profile_picture,
             rating: user.rating,
-            role: user.role
+            role: user.role,
+            created_at: user.created_at
         };
     }
 

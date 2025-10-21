@@ -2,6 +2,20 @@ import UserService from "../services/UserService.js";
 import User from "../models/User.js";
 
 class UsersController {
+    async get_me(req, res, next) {
+        console.log("/me called")
+        try {
+            console.log(req.user.id);
+            const user = await UserService.get_user(
+                req.user.id
+            );
+            res.status(200).json(user);
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+
     async get_users(req, res, next) {
         try {
             let page = parseInt(req.query.page, 10) || 1;

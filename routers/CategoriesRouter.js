@@ -8,12 +8,10 @@ import authenticator from "../middleware/AuthMiddleware.js";
 import validator from "../middleware/ValidationMiddleware.js";
 
 router.get("/",
-    authenticator.require_auth(),
     controller.get_categories
 );
 
 router.get("/:category_id",
-    authenticator.require_auth(),
     controller.get_category
 );
 

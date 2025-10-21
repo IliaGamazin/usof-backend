@@ -12,12 +12,10 @@ router.use("/subscriptions", SubscriptionsRouter);
 router.use("/favourite", FavouritesRouter);
 
 router.get("/",
-    authenticator.require_auth(),
     controller.get_posts
 );
 
 router.get("/:post_id",
-    authenticator.require_auth(),
     controller.get_post
 );
 

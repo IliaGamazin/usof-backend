@@ -9,12 +9,15 @@ import validator from "../middleware/ValidationMiddleware.js";
 import authenticator from "../middleware/AuthMiddleware.js";
 
 router.get("/",
-    authenticator.require_auth(["ADMIN"]),
     controller.get_users
 );
 
-router.get("/:user_id",
+router.get("/me",
     authenticator.require_auth(),
+    controller.get_me
+);
+
+router.get("/:user_id",
     controller.get_user
 );
 

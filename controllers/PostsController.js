@@ -12,7 +12,7 @@ class PostsController {
             let order_dir = req.query.order_dir || "DESC";
             let where = {};
 
-            if (req.user.role !== "ADMIN") {
+            if (!req.user || req.user.role !== "ADMIN") {
                 where.status = "ACTIVE";
             }
 
@@ -20,7 +20,8 @@ class PostsController {
             if (req.query.categories) {
                 if (Array.isArray(req.query.categories)) {
                     categories = req.query.categories.map(Number);
-                } else {
+                }
+                else {
                     categories = req.query.categories.split(",").map(Number);
                 }
             }
