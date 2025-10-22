@@ -56,6 +56,7 @@ class Model {
     static async get_joined_paged({
                                       joins = [],
                                       where = {},
+                                      where_like = {},  // New parameter
                                       page = 1,
                                       limit = 10,
                                       order_by = "id",
@@ -70,6 +71,7 @@ class Model {
             table: this.table_name,
             joins,
             where,
+            where_like,
             select: `COUNT(DISTINCT ${this.table_name}.id) as count`
         });
         const total = countResult[0].count;
@@ -79,6 +81,7 @@ class Model {
             table: this.table_name,
             joins,
             where,
+            where_like,
             select: selectFields,
             limit,
             offset,

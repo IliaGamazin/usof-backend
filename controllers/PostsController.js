@@ -1,5 +1,5 @@
 import Post from "../models/Post.js";
-
+import pool from "../db/pool.js"
 import PostService from "../services/PostService.js";
 import CommentService from "../services/CommentService.js";
 
@@ -11,13 +11,23 @@ class PostsController {
             let order_by = req.query.order_by || "score";
             let order_dir = req.query.order_dir || "DESC";
             let where = {};
+            let where_like = {};
 
             if (!req.user || req.user.role !== "ADMIN") {
                 where.status = "ACTIVE";
             }
 
+            if (req.query.author_id) {
+                where["posts.author_id"] = parseInt(req.query.author_id, 10);
+            }
+
+            if (req.query.title) {
+                where_like["posts.title"] = req.query.title;
+            }
+
             let categories = [];
             if (req.query.categories) {
+                console.log(req.query.categories);
                 if (Array.isArray(req.query.categories)) {
                     categories = req.query.categories.map(Number);
                 }
@@ -46,6 +56,7 @@ class PostsController {
             const result = await Post.get_joined_paged({
                 joins,
                 where,
+                where_like,
                 page,
                 limit,
                 select: `
@@ -62,6 +73,39 @@ class PostsController {
                                 : `posts.${order_by}`,
                 order_dir
             });
+
+            if (result.data.length > 0) {
+                const postIds = result.data.map(post => post.id);
+
+                const [categoryRows] = await pool.execute(
+                    `SELECT 
+                    pc.post_id,
+                    c.id,
+                    c.title,
+                    c.description
+                FROM posts_categories pc
+                INNER JOIN categories c ON c.id = pc.category_id
+                WHERE pc.post_id IN (${postIds.map(() => '?').join(',')})`,
+                    postIds
+                );
+
+                const categoriesByPost = {};
+                for (const row of categoryRows) {
+                    if (!categoriesByPost[row.post_id]) {
+                        categoriesByPost[row.post_id] = [];
+                    }
+                    categoriesByPost[row.post_id].push({
+                        id: row.id,
+                        title: row.title,
+                        description: row.description
+                    });
+                }
+
+                result.data = result.data.map(post => ({
+                    ...post,
+                    categories: categoriesByPost[post.id] || []
+                }));
+            }
 
             return res.status(200).json(result);
         }

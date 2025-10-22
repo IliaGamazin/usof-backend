@@ -16,7 +16,6 @@ router.get("/:category_id",
 );
 
 router.get("/:category_id/posts",
-    authenticator.require_auth(),
     controller.get_category_posts
 );
 

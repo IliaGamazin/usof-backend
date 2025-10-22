@@ -5,7 +5,7 @@ import Category from "../models/Category.js";
 import Comment from "../models/Comment.js";
 import PostImage from "../models/PostImage.js";
 import Like from "../models/Like.js";
-
+import pool from "../db/pool.js"
 import CredentialsException from "../exceptions/CredentialsException.js";
 import NotFoundException from "../exceptions/NotFoundException.js";
 
@@ -29,7 +29,25 @@ class PostService {
         }, 0);
 
         const images = await PostImage.get_all({ post_id: id });
-        return { post, images, score: score };
+
+        const [categoryRows] = await pool.execute(
+            `SELECT 
+            c.id,
+            c.title,
+            c.description
+        FROM posts_categories pc
+        INNER JOIN categories c ON c.id = pc.category_id
+        WHERE pc.post_id = ?`,
+            [id]
+        );
+
+        const categories = categoryRows.map(row => ({
+            id: row.id,
+            title: row.title,
+            description: row.description
+        }));
+
+        return { post, images, score, categories };
     }
 
     async get_post_categories(id, requestor) {
