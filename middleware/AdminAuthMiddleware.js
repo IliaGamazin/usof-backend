@@ -1,28 +1,37 @@
 import JwtService from "../services/JwtService.js";
+import User from "../models/User.js";
 
-class AuthMiddleware {
-     static authenticate(req, res, next) {
+class AdminAuthMiddleware {
+    static async authenticate(req, res, next) {
         try {
-            const authHeader = req.headers.authorization;
+            const refreshToken = req.cookies.refresh_token;
 
-            if (!authHeader) {
+            if (!refreshToken) {
                 return res.status(401).json({
-                    error: 'Access token is required'
+                    error: 'Please login first'
                 });
             }
 
-            const token = authHeader.split(' ')[1];
+            const decoded = JwtService.verify_refresh_token(refreshToken);
+            const user = await User.find({id: decoded.id});
 
-            if (!token) {
+            if (!user) {
                 return res.status(401).json({
-                    error: 'Access token is required'
+                    error: 'User not found'
                 });
             }
-            req.user = JwtService.verify_access_token(token);
+
+            req.user = {
+                id: user.id,
+                email: user.email,
+                role: user.role
+            };
             next();
         }
         catch (error) {
-            next(error);
+            return res.status(401).json({
+                error: 'Invalid or expired session. Please login again.'
+            });
         }
     }
 
@@ -42,12 +51,11 @@ class AuthMiddleware {
                 const role = req.user.role;
                 if (!role || !roles.includes(role)) {
                     return res.status(403).json({
-                        error: 'Insufficient permissions'
+                        error: 'Admin access only'
                     });
                 }
                 next();
-            }
-            catch (error) {
+            } catch (error) {
                 return res.status(500).json({
                     error: 'Authorization error'
                 });
@@ -57,10 +65,10 @@ class AuthMiddleware {
 
     static require_auth(roles = []) {
         return [
-            AuthMiddleware.authenticate,
-            AuthMiddleware.authorize(roles)
+            AdminAuthMiddleware.authenticate,
+            AdminAuthMiddleware.authorize(roles)
         ];
     }
 }
 
-export default AuthMiddleware;
+export default AdminAuthMiddleware;

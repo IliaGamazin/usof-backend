@@ -3,9 +3,7 @@ import User from "../models/User.js";
 
 class UsersController {
     async get_me(req, res, next) {
-        console.log("/me called")
         try {
-            console.log(req.user.id);
             const user = await UserService.get_user(
                 req.user.id
             );
@@ -23,7 +21,7 @@ class UsersController {
             let order_by = req.query.order_by || "id";
             let order_dir = req.query.order_dir || "ASC";
 
-            const allowed = ["id", "login", "rating"];
+            const allowed = ["id", "login", "rating", "created_at"];
             if (!allowed.includes(order_by)) {
                 order_by = "id";
             }
@@ -92,7 +90,7 @@ class UsersController {
                 req.body.lastname,
             );
 
-            return res.status(204).json(result);
+            return res.status(200).json(result);
         }
         catch (error) {
             next(error);

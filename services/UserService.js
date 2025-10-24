@@ -19,6 +19,7 @@ class UserService {
             login: user.login,
             firstname: user.firstname,
             lastname: user.lastname,
+            email: user.email,
             pfp: user.profile_picture,
             rating: user.rating,
             role: user.role,
@@ -55,7 +56,7 @@ class UserService {
     async update_user(id, login, firstname, lastname) {
         if (login !== undefined && login !== null) {
             const same_login = await User.find({ login });
-            if (same_login) {
+            if (same_login && same_login.id != id) {
                 throw new ConflictException("User with login already exists");
             }
         }

@@ -38,8 +38,6 @@ class AuthController {
         try {
             const refresh_token = req.cookies.refresh_token;
 
-            console.log(req.cookies);
-
             if (!refresh_token) {
                 return res.status(401).json({ error: 'Refresh token is required' });
             }
@@ -70,7 +68,7 @@ class AuthController {
             const result = await AuthService.reset_link(
                 req.body.email
             );
-
+            delete res.cookie('refresh_token', null);
             return res.status(200).json(result);
         }
         catch (error) {

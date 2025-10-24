@@ -5,8 +5,9 @@ const { JsonWebTokenError } = pkg;
 import AppException from "../exceptions/AppException.js";
 
 const exception_handler = (error, req, res, next) => {
-    console.error(`${req.method} ${req.path} - Error:`, error);
+
     if (error instanceof ZodError) {
+        console.error(`${req.method} ${req.path} - Error: VALIDATION`);
         return res.status(400).json({
             success: false,
             message: "Validation failed.",
@@ -15,6 +16,7 @@ const exception_handler = (error, req, res, next) => {
     }
 
     if (error instanceof JsonWebTokenError) {
+        console.error(`${req.method} ${req.path} - Error: JWT`);
         return res.status(401).json({
             success: false,
             message: "JWT Token Error",
@@ -31,7 +33,7 @@ const exception_handler = (error, req, res, next) => {
             error.statusCode || 500
         );
     }
-
+    console.error(`${req.method} ${req.path} - Error:` + error);
     res.status(error.statusCode).json(error.toJSON());
 }
 

@@ -4,6 +4,8 @@ import UsersSubscriptions from "../models/UsersSusbcriptions.js";
 import NotFoundException from "../exceptions/NotFoundException.js";
 import PermissionException from "../exceptions/PermissionException.js";
 
+import Mailer from "./Mailer.js";
+
 class SubscriptionsService {
     async add_subscription(requestor, post_id) {
         const post = await Post.find({ id: post_id });

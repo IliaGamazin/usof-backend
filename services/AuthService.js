@@ -6,6 +6,8 @@ import CredentialsException from "../exceptions/CredentialsException.js";
 import NotFoundException from "../exceptions/NotFoundException.js";
 import JwtService from "./JwtService.js";
 
+import Mailer from "./Mailer.js";
+
 class AuthService {
     async register(login, firstname, lastname, email, password, password_confirmation) {
         const users = await User.get_all({
@@ -64,8 +66,18 @@ class AuthService {
         });
 
         console.log(`Password reset token for ${email}: ${reset_token}`);
-        console.log(`Reset link: http://localhost:3000/password-reset/${reset_token}`);
-
+        console.log(`Reset link: http://localhost:5173/password-reset/${reset_token}`);
+        await Mailer.emails.send({
+            from: "onboarding@resend.dev",
+            to: email,
+            subject: "Password reset link",
+            html: `    <p>
+                            Password reset link: 
+                       </p>
+                       <a>
+                            http://localhost:5173/password-reset/${reset_token}\
+                       </a>`
+        });
         return { message: "If the email exists, a reset link has been sent" };
     }
 

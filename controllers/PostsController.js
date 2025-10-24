@@ -27,7 +27,6 @@ class PostsController {
 
             let categories = [];
             if (req.query.categories) {
-                console.log(req.query.categories);
                 if (Array.isArray(req.query.categories)) {
                     categories = req.query.categories.map(Number);
                 }
@@ -70,7 +69,10 @@ class PostsController {
                     order_by === "likes" ? "like_count"
                         : order_by === "dislikes" ? "dislike_count"
                             : order_by === "score" ? "score"
-                                : `posts.${order_by}`,
+                                : order_by === "created_at" ? "posts.created_at"
+                                    : order_by === "id" ? "posts.id"
+                                        : order_by === "title" ? "posts.title"
+                                            : `posts.${order_by}`,
                 order_dir
             });
 
