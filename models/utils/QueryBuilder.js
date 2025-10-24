@@ -4,6 +4,7 @@ async function query_where(
     table_name,
     {
         where = {},
+        where_like = {},
         strict = false,
         limit = null,
         offset = null,
@@ -11,19 +12,30 @@ async function query_where(
         order_dir = "ASC",
     } = {}
 ) {
-    const keys = Object.keys(where);
-    const values = Object.values(where);
+    const values = [];
+    const conditions = [];
 
-    const condition = keys.length
-        ? keys.map(k => `${k} = ?`).join(strict ? " AND " : " OR ")
-        : "1";
+    const keys = Object.keys(where);
+    if (keys.length) {
+        const whereCondition = keys.map(k => {
+            values.push(where[k]);
+            return `${k} = ?`;
+        }).join(strict ? " AND " : " OR ");
+        conditions.push(whereCondition);
+    }
+
+    for (const [key, value] of Object.entries(where_like)) {
+        conditions.push(`${key} LIKE ?`);
+        values.push(`%${value}%`);
+    }
+
+    const condition = conditions.length ? conditions.join(" AND ") : "1";
 
     let sql = `SELECT * FROM ${table_name} WHERE ${condition}`;
 
     if (order_by) {
         const allowedDirs = ["ASC", "DESC"];
         order_dir = allowedDirs.includes(order_dir.toUpperCase()) ? order_dir.toUpperCase() : "ASC";
-
         sql += ` ORDER BY ${order_by} ${order_dir}`;
     }
 

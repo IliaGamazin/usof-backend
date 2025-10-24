@@ -24,6 +24,7 @@ class Model {
 
     static async get_all_paged({
                                    where = {},
+                                   where_like = {},
                                    page = 1,
                                    limit = 10,
                                    strict = false,
@@ -32,14 +33,31 @@ class Model {
                                } = {}) {
         const offset = (page - 1) * limit;
 
+        const values = [];
+        const conditions = [];
+
+        for (const [key, value] of Object.entries(where)) {
+            conditions.push(`${key} = ?`);
+            values.push(value);
+        }
+
+        for (const [key, value] of Object.entries(where_like)) {
+            conditions.push(`${key} LIKE ?`);
+            values.push(`%${value}%`);
+        }
+
+        const whereClause = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+
         const [countRows] = await pool.execute(
-            `SELECT COUNT(*) AS count FROM ${this.table_name}`
+            `SELECT COUNT(*) AS count FROM ${this.table_name} ${whereClause}`,
+            values
         );
         const total = countRows[0].count;
         const total_pages = Math.ceil(total / limit);
 
         const rows = await QueryBuilder.query_where(this.table_name, {
             where,
+            where_like,
             strict,
             limit,
             offset,

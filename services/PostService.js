@@ -124,11 +124,9 @@ class PostService {
             throw new CredentialsException("Invalid categories");
         }
 
-        const categories_ids = await CategoryService.parse_categories(categories)
-
         const id = await post.save();
 
-        await CategoryService.save_categories(id, categories_ids);
+        await CategoryService.save_categories(id, categories);
 
         const info_arr = await FileService.save_post_images(id, files)
         return { post, info_arr };

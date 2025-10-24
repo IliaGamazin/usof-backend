@@ -8,13 +8,21 @@ class CategoriesController {
             let limit = parseInt(req.query.limit, 10) || 10;
             let order_by = req.query.order_by || "id";
             let order_dir = req.query.order_dir || "ASC";
+            let where = {};
+            let where_like = {};
 
             const allowed = ["id", "title"];
             if (!allowed.includes(order_by)) {
                 order_by = "id";
             }
 
+            if (req.query.title) {
+                where_like.title = req.query.title;
+            }
+
             const result = await Category.get_all_paged({
+                where,
+                where_like,
                 page,
                 limit,
                 order_by,
