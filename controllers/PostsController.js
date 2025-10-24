@@ -252,7 +252,7 @@ class PostsController {
                 ? req.body.categories
                 : (req.body.categories ? [req.body.categories] : []);
 
-            const files_to_delete_arr = Array.isArray(req.body.files_to_delete)
+            const files_to_delete = Array.isArray(req.body.files_to_delete)
                 ? req.body.files_to_delete
                 : (req.body.files_to_delete ? [req.body.files_to_delete] : []);
 
@@ -262,7 +262,7 @@ class PostsController {
                 req.body.title,
                 req.body.content,
                 categories_arr,
-                files_to_delete_arr,
+                files_to_delete,
                 req.files,
                 req.body.status
             );

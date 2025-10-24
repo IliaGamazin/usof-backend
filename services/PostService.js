@@ -120,7 +120,15 @@ class PostService {
             throw new NotFoundException("No author with id");
         }
 
-        if (categories.length === 0) {
+        if (!title || title.trim().length === 0) {
+            throw new CredentialsException("Invalid title");
+        }
+
+        if (!content || content.trim().length === 0) {
+            throw new CredentialsException("Invalid content");
+        }
+
+        if (!categories || categories.length === 0) {
             throw new CredentialsException("Invalid categories");
         }
 
@@ -205,6 +213,10 @@ class PostService {
             throw new NotFoundException("No post with id");
         }
 
+        if (!categories || categories.length === 0) {
+            throw new CredentialsException("Post must have a category");
+        }
+
         if (post.author_id !== author.id && author.role !== "ADMIN") {
             throw new PermissionException("Permission denied");
         }
@@ -222,14 +234,12 @@ class PostService {
         }
 
         const curr_categories = await PostsCategories.get_all({ post_id: id });
-        for (const cc of curr_categories) {
-            const pc = await PostsCategories.find({ id: cc.id });
+        for (const category of curr_categories) {
+            const pc = await PostsCategories.find({ id: category });
             await pc.delete();
         }
 
-
-        const categories_ids = await CategoryService.parse_categories(categories)
-        await CategoryService.save_categories(id, categories_ids);
+        await CategoryService.save_categories(id, categories);
 
         if (files_to_delete && files_to_delete.length > 0) {
             for (const file_id of files_to_delete) {

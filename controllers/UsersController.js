@@ -20,18 +20,29 @@ class UsersController {
             let limit = parseInt(req.query.limit, 10) || 10;
             let order_by = req.query.order_by || "id";
             let order_dir = req.query.order_dir || "ASC";
+            let where = {};
+            let where_like = {};
 
             const allowed = ["id", "login", "rating", "created_at"];
             if (!allowed.includes(order_by)) {
                 order_by = "id";
             }
 
+            if (req.query.login) {
+                where_like.login = req.query.login;
+                console.log(req.query.login);
+            }
+
             let result = await User.get_all_paged({
+                where,
+                where_like,
                 page,
                 limit,
                 order_by,
                 order_dir,
             });
+
+            console.log(result);
 
             result.data = result.data.map(user => {
                 const { password, ...safe } = user;
