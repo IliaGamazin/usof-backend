@@ -54,7 +54,7 @@ async function query_join({
                               table,
                               joins = [],
                               where = {},
-                              where_like = {},  // New parameter
+                              where_like = {},
                               select = '*',
                               limit = null,
                               offset = null,
@@ -72,7 +72,9 @@ async function query_join({
     const whereConditions = [];
 
     for (const [key, value] of Object.entries(where)) {
-        if (Array.isArray(value)) {
+        if (value === null) {
+            whereConditions.push(`${key} IS NULL`);
+        } else if (Array.isArray(value)) {
             whereConditions.push(`${key} IN (${value.map(() => '?').join(',')})`);
             values.push(...value);
         } else {

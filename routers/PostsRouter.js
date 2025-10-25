@@ -25,7 +25,6 @@ router.get("/:post_id/userdata",
 );
 
 router.get("/:post_id/comments",
-    authenticator.require_auth(),
     controller.get_post_comments
 );
 

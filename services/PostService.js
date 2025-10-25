@@ -71,7 +71,7 @@ class PostService {
         return res;
     }
 
-    async get_post_comments(id, page, limit, order_by, order_dir, requestor) {
+    async get_post_comments(id, page, limit, order_by, order_dir, requestor, parent_id = null) {
         const post = await Post.find({ id });
         if (!post) {
             throw new NotFoundException("No post with id");
@@ -87,17 +87,18 @@ class PostService {
             type: "LEFT"
         }];
 
+        const where = parent_id === "ANY" ? {post_id: id} : { post_id: id, parent_id: parent_id };
         return await Comment.get_joined_paged({
             joins,
-            where: { post_id: id },
+            where,
             page,
             limit,
             select: `
-            comments.*,
-            SUM(cl.reaction = 'LIKE') as like_count,
-            SUM(cl.reaction = 'DISLIKE') as dislike_count,
-            (SUM(cl.reaction = 'LIKE') - SUM(cl.reaction = 'DISLIKE')) as score
-        `,
+                comments.*,
+                IFNULL(SUM(cl.reaction = 'LIKE'), 0) as like_count,
+                IFNULL(SUM(cl.reaction = 'DISLIKE'), 0) as dislike_count,
+                (IFNULL(SUM(cl.reaction = 'LIKE'), 0) - IFNULL(SUM(cl.reaction = 'DISLIKE'), 0)) as score
+            `,
             group_by: "comments.id",
             order_by:
                 order_by === "likes" ? "like_count"

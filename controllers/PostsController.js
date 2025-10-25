@@ -135,14 +135,15 @@ class PostsController {
             let limit = parseInt(req.query.limit, 10) || 10;
             let order_by = req.query.order_by || "score";
             let order_dir = req.query.order_dir || "DESC";
-
+            let parent_id = req.query.parent_id || null;
             const result = await PostService.get_post_comments(
                 req.params.post_id,
                 page,
                 limit,
                 order_by,
                 order_dir,
-                req.user
+                req.user,
+                parent_id
             );
 
             res.status(200).json(result);
@@ -163,11 +164,13 @@ class PostsController {
             const result = await CommentService.new_comment(
                 id,
                 req.user.id,
-                req.body.content
+                req.body.content,
+                req.body.parent_id || null
             );
 
             res.status(200).json(result);
-        } catch (error) {
+        }
+        catch (error) {
             next(error);
         }
     }

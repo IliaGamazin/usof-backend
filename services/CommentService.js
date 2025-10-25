@@ -26,11 +26,19 @@ class CommentService {
         return { comment, score: score };
     }
 
-    async new_comment(post_id, author_id, content) {
+    async new_comment(post_id, author_id, content, parent_id = null) {
+        if (parent_id !== null) {
+            const parent = await Comment.find({id: parent_id});
+            if (!parent) {
+                throw new NotFoundException("Invalid parent id");
+            }
+        }
+
         const comment = new Comment({
             author_id,
             content,
             post_id,
+            parent_id: parent_id,
             created_at: new Date(),
             updated_at: new Date(),
         });
