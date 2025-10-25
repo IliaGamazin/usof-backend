@@ -29,8 +29,7 @@ class PostsController {
             if (req.query.categories) {
                 if (Array.isArray(req.query.categories)) {
                     categories = req.query.categories.map(Number);
-                }
-                else {
+                } else {
                     categories = req.query.categories.split(",").map(Number);
                 }
             }
@@ -60,9 +59,9 @@ class PostsController {
                 limit,
                 select: `
                 posts.*,
-                SUM(l.reaction = 'LIKE') as like_count,
-                SUM(l.reaction = 'DISLIKE') as dislike_count,
-                (SUM(l.reaction = 'LIKE') - SUM(l.reaction = 'DISLIKE')) as score
+                IFNULL(SUM(l.reaction = 'LIKE'), 0) as like_count,
+                IFNULL(SUM(l.reaction = 'DISLIKE'), 0) as dislike_count,
+                IFNULL(SUM(l.reaction = 'LIKE') - SUM(l.reaction = 'DISLIKE'), 0) as score
             `,
                 group_by: "posts.id",
                 order_by:
@@ -80,14 +79,13 @@ class PostsController {
                 const postIds = result.data.map(post => post.id);
 
                 const [categoryRows] = await pool.execute(
-                    `SELECT 
-                    pc.post_id,
-                    c.id,
-                    c.title,
-                    c.description
-                FROM posts_categories pc
-                INNER JOIN categories c ON c.id = pc.category_id
-                WHERE pc.post_id IN (${postIds.map(() => '?').join(',')})`,
+                    `SELECT pc.post_id,
+                            c.id,
+                            c.title,
+                            c.description
+                     FROM posts_categories pc
+                              INNER JOIN categories c ON c.id = pc.category_id
+                     WHERE pc.post_id IN (${postIds.map(() => '?').join(',')})`,
                     postIds
                 );
 
@@ -110,8 +108,7 @@ class PostsController {
             }
 
             return res.status(200).json(result);
-        }
-        catch (error) {
+        } catch (error) {
             next(error);
         }
     }
@@ -127,8 +124,7 @@ class PostsController {
             }
 
             res.status(200).json(result);
-        }
-        catch (error) {
+        } catch (error) {
             next(error);
         }
     }
@@ -150,8 +146,7 @@ class PostsController {
             );
 
             res.status(200).json(result);
-        }
-        catch (error) {
+        } catch (error) {
             next(error);
         }
     }
@@ -172,8 +167,7 @@ class PostsController {
             );
 
             res.status(200).json(result);
-        }
-        catch (error) {
+        } catch (error) {
             next(error);
         }
     }
@@ -184,9 +178,8 @@ class PostsController {
                 req.params.post_id,
                 req.user
             );
-            res.status(200).json({ categories });
-        }
-        catch (error) {
+            res.status(200).json({categories});
+        } catch (error) {
             next(error);
         }
     }
@@ -199,8 +192,7 @@ class PostsController {
             );
 
             return res.status(200).json(result);
-        }
-        catch (error) {
+        } catch (error) {
             next(error);
         }
     }
@@ -220,8 +212,7 @@ class PostsController {
             );
 
             return res.status(200).json(result);
-        }
-        catch (error) {
+        } catch (error) {
             next(error);
         }
     }
@@ -240,8 +231,7 @@ class PostsController {
             );
 
             return res.status(201).send();
-        }
-        catch (error) {
+        } catch (error) {
             next(error);
         }
     }
@@ -266,7 +256,7 @@ class PostsController {
                 req.files,
                 req.body.status
             );
-            res.status(204).json(result);
+            res.status(200).json(result);
         }
         catch (error) {
             next(error);
@@ -294,6 +284,19 @@ class PostsController {
             );
 
             return res.status(204).send();
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async get_post_userdata(req, res, next) {
+        try {
+            const result = await PostService.get_post_userdata(
+                req.user.id,
+                req.params.post_id
+            )
+
+            return res.status(200).json(result);
         }
         catch (error) {
             next(error);

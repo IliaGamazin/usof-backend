@@ -30,7 +30,6 @@ class UsersController {
 
             if (req.query.login) {
                 where_like.login = req.query.login;
-                console.log(req.query.login);
             }
 
             let result = await User.get_all_paged({
@@ -41,8 +40,6 @@ class UsersController {
                 order_by,
                 order_dir,
             });
-
-            console.log(result);
 
             result.data = result.data.map(user => {
                 const { password, ...safe } = user;
@@ -93,7 +90,7 @@ class UsersController {
             if (req.user.id != id && user_role !== "ADMIN") {
                 return res.status(403).send()
             }
-
+            
             const result = await UserService.update_user(
                 id,
                 req.body.login,

@@ -66,17 +66,21 @@ class UserService {
             throw new NotFoundException("No user with id");
         }
 
-        if (login !== undefined && login !== null) {
-            user.login = login;
+        if (!login || login.trim().length === 0) {
+            throw new ConflictException("User must have a login");
         }
 
-        if (firstname !== undefined && firstname !== null) {
-            user.firstname = firstname;
+        if (!firstname || firstname.trim().length === 0) {
+            throw new ConflictException("User must have a firstname");
         }
 
-        if (lastname !== undefined && lastname !== null) {
-            user.lastname = lastname;
+        if (!lastname || lastname.trim().length === 0) {
+            throw new ConflictException("User must have a lastname");
         }
+
+        user.login = login;
+        user.firstname = firstname;
+        user.lastname = lastname;
 
         await user.save();
         return user;

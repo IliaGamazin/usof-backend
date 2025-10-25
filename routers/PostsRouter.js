@@ -19,6 +19,11 @@ router.get("/:post_id",
     controller.get_post
 );
 
+router.get("/:post_id/userdata",
+    authenticator.require_auth(),
+    controller.get_post_userdata,
+);
+
 router.get("/:post_id/comments",
     authenticator.require_auth(),
     controller.get_post_comments

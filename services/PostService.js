@@ -1,6 +1,8 @@
 import Post from "../models/Post.js";
 import User from "../models/User.js";
 import PostsCategories from "../models/PostsCategories.js";
+import UsersFavourites from "../models/UsersFavourites.js";
+import UsersSubscriptions from "../models/UsersSubscriptions.js";
 import Category from "../models/Category.js";
 import Comment from "../models/Comment.js";
 import PostImage from "../models/PostImage.js";
@@ -235,7 +237,7 @@ class PostService {
 
         const curr_categories = await PostsCategories.get_all({ post_id: id });
         for (const category of curr_categories) {
-            const pc = await PostsCategories.find({ id: category });
+            const pc = await PostsCategories.find({ id: category.id });
             await pc.delete();
         }
 
@@ -272,6 +274,18 @@ class PostService {
 
         await post.delete();
         await FileService.delete_post_directory(id);
+    }
+
+    async get_post_userdata(user_id, post_id){
+        const favourite = await UsersFavourites.find({ user_id: user_id , post_id: post_id });
+        const subscription = await UsersSubscriptions.find({ user_id: user_id , post_id: post_id });
+        const like = await Like.find({user_id: user_id , post_id: post_id});
+
+        return {
+            favourites: !!favourite,
+            followed: !!subscription,
+            like_status: like ? like.reaction : "NONE"
+        }
     }
 }
 

@@ -1,5 +1,5 @@
 import Post from "../models/Post.js";
-import UsersSubscriptions from "../models/UsersSusbcriptions.js";
+import UsersSubscriptions from "../models/UsersSubscriptions.js";
 
 import NotFoundException from "../exceptions/NotFoundException.js";
 import PermissionException from "../exceptions/PermissionException.js";

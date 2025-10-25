@@ -62,11 +62,11 @@ class FavouritesController {
                 page,
                 limit,
                 select: `
-            posts.*,
-            SUM(l.reaction = 'LIKE') as like_count,
-            SUM(l.reaction = 'DISLIKE') as dislike_count,
-            (SUM(l.reaction = 'LIKE') - SUM(l.reaction = 'DISLIKE')) as score
-        `,
+                posts.*,
+                IFNULL(SUM(l.reaction = 'LIKE'), 0) as like_count,
+                IFNULL(SUM(l.reaction = 'DISLIKE'), 0) as dislike_count,
+                IFNULL(SUM(l.reaction = 'LIKE') - SUM(l.reaction = 'DISLIKE'), 0) as score
+            `,
                 group_by: "posts.id",
                 order_by:
                     order_by === "likes" ? "like_count"
